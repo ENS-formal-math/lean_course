@@ -48,12 +48,14 @@ example (x y z a b c : Nat) (h1 : x + y + z = a + b + c)
 2. Indentation rules.
 
 a) Keywords like theorem/lemma/example have to flush-left in the document.
-b) Proof has to be indented with 2 spaces (one tab push).
-c) If theorem statement doesn't fit, as in previous rule you indent it with 4 spaces.
-d) Keywords by/calc have to be on the same line as the statement
 
-Here's the example:
+b) Proof has to be indented with 2 spaces (one tab push).
+
+c) If theorem statement doesn't fit, as in previous rule you indent it with 4 spaces.
+
+d) Keywords by/calc have to be on the same line as the statement
 -/
+-- Here's the example: --
 example (x y z a b c : Nat) (h1 : x + y + z = a + b + c)
     (h2 : x + y = a + b) (h3 : x = a) : x * y * z = a * b * c := by
   rw [h3] at h2
@@ -76,10 +78,10 @@ and see how it's typed. Now guess yourself how to type \ itself.
 4. Hypotheses to the left.
 
 a) Try to replace general quantifier with explicit variable declaration
-b) Try to replace implication with explicit hypotheses declaration
 
-Here's the example:
+b) Try to replace implication with explicit hypotheses declaration
 -/
+-- Here's the example: --
 example (n : Nat) : n = n := by rfl
 
 -- is better than --
