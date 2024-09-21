@@ -8,7 +8,8 @@ example (a b c : ℝ) : a * b * c = b * (a * c) := by
 
 -- Try these.
 example (a b c : ℝ) : c * b * a = b * (a * c) := by
-  sorry
+  rw [mul_comm, mul_comm c b]
+  rw [← mul_assoc, ← mul_assoc, mul_comm b a]
 
 -- Using facts from the local context.
 example (a b c d e f : ℝ) (h : a * b = c * d) (h' : e = f) : a * (b * e) = c * (d * f) := by
@@ -18,7 +19,10 @@ example (a b c d e f : ℝ) (h : a * b = c * d) (h' : e = f) : a * (b * e) = c *
   rw [mul_assoc]
 
 example (a b c d : ℝ) (hyp : c = b * a - d) (hyp' : d = a * b) : c = 0 := by
-  sorry
+  rw [mul_comm] at hyp'
+  rw [← hyp'] at hyp
+  rw [hyp]
+  exact sub_eq_zero_of_eq rfl
 
 section
 variable (a b : ℝ)
@@ -40,13 +44,20 @@ example : (a + b) * (a + b) = a * a + 2 * (a * b) + b * b :=
 example : (a + b) * (a + b) = a * a + 2 * (a * b) + b * b :=
   calc
     (a + b) * (a + b) = a * a + b * a + (a * b + b * b) := by
-      sorry
+      ring
     _ = a * a + (b * a + a * b) + b * b := by
-      sorry
+      ring
     _ = a * a + 2 * (a * b) + b * b := by
-      sorry
+      ring
 
 end
 
 example (a b c : ℝ) : c * b * a = b * (a * c) := by
   ring
+
+section
+
+variable (a b c : ℝ)
+example : (a + b) * (a + b) = a * a + 2 * (a * b) + b * b := by ring
+
+end

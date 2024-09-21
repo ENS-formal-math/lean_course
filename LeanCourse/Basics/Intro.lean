@@ -18,6 +18,12 @@ def f(n : ℕ) := 2 * n
 #check f
 -- equivalent type of f is ℕ → ℕ --
 
+def g(_ _ : ℕ) := 0
+#check g
+-- type ℕ → ℕ → ℕ --
+
+#eval f (g 0 1)
+-- evaluate expressions --
 
 -- Everything has a type, even types themselves! --
 #check ℕ
@@ -29,6 +35,8 @@ One of the most important types is called Prop (for proposition).
 Typical theorem statement that you write will have this type
 -/
 def first_theorem := ∀ n, Even (f n)
+
+#check False
 
 #check first_theorem
 
@@ -52,6 +60,9 @@ For example:
 -/
 theorem proof_object : first_theorem :=
   fun n => ⟨n, Nat.two_mul n⟩
+
+#check Nat.two_mul 0
+
 /-
 You don't need to understand everything but type of first_theorem is ∀ n, Even (f n),
 meaning that for each n we need to provide proof of type Even (f n). This is exactly,
@@ -74,6 +85,10 @@ theorem proof_with_tactics : first_theorem := by
 
 -- Typically, you name proof by the theorem's name. So something more mathlib-like would look like --
 theorem even_f (n : ℕ) : Even (f n) := ⟨n, Nat.two_mul n⟩
+
+def even_f_def (n: ℕ) : 2 * n = n + n := Nat.two_mul n
+
+#check even_f_def
 
 /-
 Tactical proofs are simple to write and understand, but functional proofs constantly remind us of

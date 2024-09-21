@@ -84,6 +84,11 @@ b) Try to replace implication with explicit hypotheses declaration
 -- Here's the example: --
 example (n : Nat) : n = n := by rfl
 
+example (a : Nat) (h : ∀ n, n + a = n) : a = 0 := by
+  have h' := h 0
+  rw [Nat.zero_add] at h'
+  exact h'
+
 -- is better than --
 example : ∀ (n : Nat), n = n := by
   intro n
