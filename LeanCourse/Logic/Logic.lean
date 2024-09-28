@@ -97,3 +97,79 @@ example (h : ∃ x, ¬P x) : ¬∀ x, P x := by
 In the third one, we need a tactic from classical logic `by_contra`. It allows
 to prove goal P by assuming ¬P and deriving a contradiction.
 -/
+
+-- Conjuction --
+
+example {x y : ℝ} (h₀ : x ≤ y) (h₁ : ¬y ≤ x) : x ≤ y ∧ x ≠ y := by
+  constructor
+  · assumption
+  intro h
+  apply h₁
+  rw [h]
+
+-- To use a hypothesis with conjuction, there are different variants --
+example {x y : ℝ} (h : x ≤ y ∧ x ≠ y) : ¬y ≤ x := by
+  rcases h with ⟨h₀, h₁⟩
+  contrapose! h₁
+  exact le_antisymm h₀ h₁
+
+example {x y : ℝ} : x ≤ y ∧ x ≠ y → ¬y ≤ x := by
+  rintro ⟨h₀, h₁⟩ h'
+  exact h₁ (le_antisymm h₀ h')
+
+example {x y : ℝ} : x ≤ y ∧ x ≠ y → ¬y ≤ x :=
+  fun ⟨h₀, h₁⟩ h' ↦ h₁ (le_antisymm h₀ h')
+
+example {x y : ℝ} (h : x ≤ y ∧ x ≠ y) : ¬y ≤ x := by
+  have ⟨h₀, h₁⟩ := h
+  contrapose! h₁
+  exact le_antisymm h₀ h₁
+
+example {x y : ℝ} (h : x ≤ y ∧ x ≠ y) : ¬y ≤ x := by
+  cases h
+  case intro h₀ h₁ =>
+    contrapose! h₁
+    exact le_antisymm h₀ h₁
+
+example {x y : ℝ} (h : x ≤ y ∧ x ≠ y) : ¬y ≤ x := by
+  match h with
+    | ⟨h₀, h₁⟩ =>
+        contrapose! h₁
+        exact le_antisymm h₀ h₁
+
+-- Iff --
+
+example {x y : ℝ} (h : x ≤ y) : ¬y ≤ x ↔ x ≠ y := by
+  constructor
+  · contrapose!
+    rintro rfl
+    rfl
+  contrapose!
+  exact le_antisymm h
+
+example {x y : ℝ} (h : x ≤ y) : ¬y ≤ x ↔ x ≠ y :=
+  ⟨fun h₀ h₁ ↦ h₀ (by rw [h₁]), fun h₀ h₁ ↦ h₀ (le_antisymm h h₁)⟩
+
+-- Disjunction --
+
+example (h : y > 0) : y > 0 ∨ y < -1 := by
+  left
+  exact h
+
+example (h : y < -1) : y > 0 ∨ y < -1 := by
+  right
+  exact h
+
+example (h : y > 0) : y > 0 ∨ y < -1 :=
+  Or.inl h
+
+example (h : y < -1) : y > 0 ∨ y < -1 :=
+  Or.inr h
+
+-- You can use rcases to introduce disjunction hypothesis and split on it --
+example : x < |y| → x < y ∨ x < -y := by
+  rcases le_or_gt 0 y with h | h
+  · rw [abs_of_nonneg h]
+    intro h; left; exact h
+  · rw [abs_of_neg h]
+    intro h; right; exact h
