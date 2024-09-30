@@ -7,6 +7,10 @@ example (a : ℝ) : a ≥ 1 → a ≥ 0 := by
   intro h
   linarith
 
+example (a : ℝ) (h : a ≥ 1 → a ≥ 0) (g: a ≥ 2) : a ≥ 0 := by
+  have h' : a ≥ 1 := by linarith
+  exact h h'
+
 -- Universal quantifier --
 
 def FnUb (f : ℝ → ℝ) (a : ℝ) : Prop :=
@@ -87,16 +91,53 @@ example (h : ¬∃ x, P x) : ∀ x, ¬P x := by
 example (h : ∀ x, ¬P x) : ¬∃ x, P x := by
   sorry
 
+/-
+In the following example, you will need to use tactic from classical logic `by_contra`.
+It allows to prove goal P by assuming ¬P and deriving a contradiction.
+-/
 example (h : ¬∀ x, P x) : ∃ x, ¬P x := by
-  sorry
+  by_contra h'
+  apply h
+  intro x
+  by_contra h''
+  apply h'
+  use x
+
+/-
+In pure Lean, you won't be able to prove this tactic, because there is no
+law of excluded middle (LEM). Basically, you don't know if statement can be either
+true or false. You can derive other statements unprovable without LEM, like this one
+-/
+example (P : Prop) (h: P ∨ ¬ P) : ¬ (¬ P) → P := by
+  intro h'
+  rcases h with hp | hnp
+  . exact hp
+  . apply h' at hnp
+    contradiction
+
+/-
+Alternative tactic is `by_cases`, by calling `by_cases h` you split on cases
+when `h` is true or false
+-/
+example (P : Prop) : ¬ (¬ P) → P := by
+  intro h'
+  by_cases h : P
+  . exact h
+  . have := h' h
+    contradiction
 
 example (h : ∃ x, ¬P x) : ¬∀ x, P x := by
   sorry
 
 /-
-In the third one, we need a tactic from classical logic `by_contra`. It allows
-to prove goal P by assuming ¬P and deriving a contradiction.
+There's a useful tactic to normalize negated statements with
+universal and existential quantifiers by pushing negation inside
+called `push_neg`. Here's an example
 -/
+
+example (h : ¬∀ a, ∃ x, f x > a) : ∃ a, ∀ x, f x ≤ a := by
+  push_neg at h
+  exact h
 
 -- Conjuction --
 

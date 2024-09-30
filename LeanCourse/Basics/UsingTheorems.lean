@@ -43,7 +43,8 @@ example (h : 2 * a ≤ 3 * b) (h' : 1 ≤ a) (h'' : d = 2) : d + a ≤ 5 * b := 
 -- You can subsitute theorems into `linarith` --
 
 example (h : 1 ≤ a) (h' : b ≤ c) : 2 + a + Real.exp b ≤ 3 * a + Real.exp c := by
-  linarith [Real.exp_le_exp.mpr h']
+  have h := Real.exp_le_exp.mpr h'
+  linarith [h]
 
 /-
 There are a number of strategies you can use to find theorems:
