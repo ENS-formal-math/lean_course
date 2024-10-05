@@ -24,13 +24,9 @@ An n-way sum is an integer s which can be expressed as the sum of two cubes in
 exactly n different ways. Without loss of generality we can assume that a₁ < a₂ < ... < aₙ.
 -/
 
-def lt {s : ℕ} (left right : TwoCubesExpression s) : Prop :=
+def lt (left right : TwoCubesExpression s) : Prop :=
   match left, right with
   | ⟨a, _, _, _⟩, ⟨a', _, _, _⟩ => a < a'
-
-/-instance : Decidable (lt left right) :=
-  match left, right with
-  | ⟨a, _, _, _⟩, ⟨a', _, _, _⟩ => Nat.decLt a a'-/
 
 def way_sum (n s : ℕ) : Prop :=
   ∃ l : List (TwoCubesExpression s), l.length = n ∧ List.Sorted lt l
