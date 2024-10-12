@@ -25,11 +25,15 @@ variable {α : Type*}
 variable (s t u : Set α)
 open Set
 
+#check Set.Subset
+
 -- For example, view ⊆ in Set.Subset and ∩ in Set.inter --
 example (h : s ⊆ t) : s ∩ u ⊆ t ∩ u := by
+  -- goal : ∀ x, x ∈ s ∩ u → x ∈ t ∩ u --
+  -- h : ∀ x, x ∈ s → x ∈ t --
   intro x
   intro hx
-  simp at hx
+  simp at hx -- x ∈ s ∩ u is the same as x ∈ s ∧ x ∈ u --
   simp
   exact ⟨h hx.1, hx.2⟩
 

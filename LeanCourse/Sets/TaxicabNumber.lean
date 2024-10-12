@@ -77,17 +77,29 @@ Reference [2] provides a much more efficient algorithm involving prime factoriza
 and finding two factors, corresponding to the factors a^3 + b^3 = (a + b)(a^2 - ab + b^2).
 -/
 
+def print_pairs (a b : ℕ) : List (ℕ × ℕ) :=
+  match a, b with
+  | _, 0 => [⟨0, 0⟩]
+  | 0, Nat.succ b' => print_pairs b' b'
+  | Nat.succ a', b => ⟨a, b⟩ :: (print_pairs a' b)
+
+#eval print_pairs 5 5
+
 -- max : ℕ is a limit on how large cube we consider --
 def get_way_sum_expr (s max : ℕ) : List (TwoCubesExpression s) :=
   go s max max max (by linarith)
 where
   go (s max a b : ℕ) (hord : a ≤ b) : List (TwoCubesExpression s) :=
     match a, b with
-    | _, 0 => []
+    | _, 0 =>
+      if has: a = 0 ∧ s = 0 then
+        [⟨0, 0, (by linarith[has]), (by linarith)⟩]
+      else
+        []
     | 0, Nat.succ b' => go s max b' b' (by linarith)
     | Nat.succ a', b =>
       if hs : s = a'.succ^3 + b^3 then
-        @TwoCubesExpression.mk s a'.succ b hs hord :: go s max a' b (by linarith[hord])
+        ⟨a'.succ, b, hs, hord⟩ :: go s max a' b (by linarith[hord])
       else
         go s max a' b (by linarith[hord])
 
@@ -120,7 +132,30 @@ theorem get_way_sum_expr_sorted (s max : ℕ) :
   apply go_sorted
 
 theorem get_way_sum_expr_maximal {s max : ℕ} (x : TwoCubesExpression s)
-    (hmax : s ≤ max^3) : x ∈ get_way_sum_expr s max := by sorry
+    (hmax : s ≤ max^3) : x ∈ get_way_sum_expr s max := by
+  unfold get_way_sum_expr
+  induction max generalizing s with
+  | zero =>
+    unfold get_way_sum_expr.go
+    have h : s = 0 := by exact Nat.eq_zero_of_le_zero hmax
+    simp [h]
+    have ⟨a, b, hs, hord⟩ := x
+    rw [h] at hs
+    cases a with
+    | zero =>
+      cases b with
+      | zero =>
+        simp
+      | succ b' =>
+        have h' : (b' + 1) ^ 3 = b' ^ 3 + 3 * b' ^ 2 + 3 * b' + 1 := by ring
+        simp[h'] at hs
+    | succ a' =>
+      have h' : (a' + 1) ^ 3 = a' ^ 3 + 3 * a' ^ 2 + 3 * a' + 1 := by ring
+      simp[h'] at hs
+      rw [add_assoc, add_comm 1, ← add_assoc] at hs
+      simp at hs
+  | succ max' =>
+    sorry
 
 -- Lemma that take first n elements operation doesn't break sorting --
 lemma take_sorted (n : ℕ) (l : List α) (h : List.Sorted r l) : List.Sorted r (List.take n l) := by
@@ -214,3 +249,16 @@ theorem get_way_sum_correct (s max : ℕ) (hmax : s ≤ max^3) :
     rw [hlen] at hbound
     unfold get_way_sum at hn
     linarith
+
+/-
+Now we define main algorithm - loop until 1729, compute get_way_sum
+for each integer, observe that 1729 is the smallest with output 2.
+-/
+
+def main_loop (n max : ℕ) : Option ℕ := go n max 0
+where
+  go (n max s : ℕ) : Option ℕ :=
+    if s < max^3 then
+      if get_way_sum s max = n then some s else go n max s.succ
+    else
+      none
