@@ -4,6 +4,7 @@ import Mathlib.Algebra.Ring.Defs
 import Mathlib.Order.Defs
 import Mathlib.Algebra.Ring.Int
 import Mathlib.Data.SetLike.Basic
+import Mathlib.Algebra.Module.Defs
 
 -- Here we discuss how to build hierarchy of algebraic structures --
 
@@ -14,6 +15,8 @@ class One₁ (α : Type) where
 
 @[inherit_doc]
 notation "𝟙" => One₁.one
+
+example (α : Type) [One₁ α] : (One₁.one : α) = 𝟙 := by rfl
 
 instance : One₁ ℕ where
   one := 1
@@ -85,13 +88,7 @@ class DiaOneClass₁ (α : Type) extends One₁ α, Dia₁ α where
 -- We can just extend --
 class Monoid₁ (α : Type) extends Semigroup₁ α, DiaOneClass₁ α
 
--- Now we discuss how to define classes with multiple types --
-
-class SMul₃ (α : Type) (β : Type) where
-  /-- Scalar multiplication -/
-  smul : α → β → β
-
-infixr:73 " • " => SMul₃.smul
+class Monoid₂ (α : Type) [Semigroup₁ α] extends DiaOneClass₁ α
 
 class AddSemigroup₃ (α : Type) extends Add α where
 /-- Addition is associative -/
@@ -151,6 +148,14 @@ instance : Ring₃ ℤ where
   left_distrib := Int.mul_add
   right_distrib := Int.add_mul
 
+-- Now we discuss how to define classes with multiple types --
+
+class SMul₃ (α : Type) (β : Type) where
+  /-- Scalar multiplication -/
+  smul : α → β → β
+
+infixr:73 " • " => SMul₃.smul
+
 -- Define module over a ring --
 class Module₁ (R : Type) [Ring₃ R] (M : Type) [AddCommGroup₃ M] extends SMul₃ R M where
   zero_smul : ∀ m : M, (0 : R) • m = 0
@@ -166,9 +171,7 @@ class Module₂ (R : Type) [Ring R] (M : Type) extends SMul₃ R M, AddCommGroup
   mul_smul : ∀ (a b : R) (m : M), (a * b) • m = a • b • m
   add_smul : ∀ (a b : R) (m : M), (a + b) • m = a • m + b • m
   smul_add : ∀ (a : R) (m n : M), a • (m + n) = a • m + a • n
--/
 
-/-
 Note that if we uncomment block above, we will get an error. The problem is that
 AddCommGroup M instance is going to be part of Module₂ R M instance and we won't
 be able to infer type R from AddCommGroup M.
@@ -213,6 +216,13 @@ inside AddMonoid A from the start
 General rule: when going from rich (Module R M)
 to poor structure (Module ℤ M) never define, but forget
 -/
+
+#check AddMonoid
+
+#synth Module ℤ ℤ
+
+variable (R: Type) [Ring R]
+#synth Module R R
 
 class AddMonoid₄ (M : Type) extends AddSemigroup₃ M, AddZeroClass M where
   /-- Multiplication by a natural number. -/

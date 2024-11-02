@@ -1,0 +1,1160 @@
+,problems,solutions,type,comments
+15291,"Dad, Masha, and Yasha are walking to school. While Dad takes 3 steps, Masha takes 5 steps. While Masha takes 3 steps, Yasha takes 5 steps. Masha and Yasha counted that together they took 400 steps. How many steps did Dad take?","
+Let us solve the problem of how many steps Father made as follows:
+
+1. **Define the Giant's Step**:
+   We introduce the concept of a ""Giant's Step,"" which is equivalent to \(3\) steps of Masha and \(5\) steps of Yasha.
+
+2. **Calculate Giant's steps by Masha and Yasha**:
+   Every time Masha makes \(3\) steps, Yasha makes \(5\) steps. Therefore, together Masha and Yasha make \(8\) steps each time the Giant takes one step.
+
+3. **Determine the Number of Giant's Steps**:
+   The problem states that Masha and Yasha together made \(400\) steps. Since together they make \(8\) steps with each Giant's step:
+   \[
+   \text{Number of Giant's steps} = \frac{400}{8} = 50
+   \]
+
+4. **Relate Giant's Steps to Masha's Steps**:
+   We know that each Giant's step is equivalent to \(3\) of Masha's steps. Therefore, if the Giant made \(50\) steps, then Masha made:
+   \[
+   \text{Masha's steps} = 3 \times 50 = 150
+   \]
+
+5. **Determine Father’s Steps**:
+   Since one Giant’s step is also equivalent to \(5\) steps by Yasha, and Yasha makes \(5\) steps for every \(3\) steps of Masha, then Masha's \(150\) steps can be further broken down into groups related to Father’s steps. Each of these groups corresponds to \(15\) total steps made by Yasha and Father collectively:
+   \[
+   \text{Masha's equivalence in Father's steps} = \frac{150}{5} = 30
+   \]
+   Therefore, Father takes \(3\) steps for each group of \(5\) of Yasha (where 1 group = 3 steps of Masha = 5 steps of Yasha = 3 steps of Father):
+   \[
+   \text{Father's steps} = 30 \times 3 = 90
+   \]
+
+**Conclusion**: The total number of steps made by Father is therefore:
+\[
+\boxed{90}
+\]",Combinatorics,Simple combinatorics
+81736,"Let \( S = \{1, 2, \cdots, 100\} \). If a three-element subset \( A = \{a, b, c\} \) of \( S \) satisfies \( a + b = 3c \), then \( A \) is said to have Property \( P \). Determine the number of three-element subsets of \( S \) that have Property \( P \).","
+Given that \( S = \{1, 2, \cdots, 100\} \), we are to find the number of 3-element subsets \( A = \{a, b, c\} \) of \( S \) satisfying \( a + b = 3c \).
+
+1. **Classification of elements according to their residue modulo 3**:
+
+   Let us denote the sets \( S_k \) as follows:
+   \[
+   S_k = \{ n \mid n \equiv k \pmod{3}, n \in S \}, \quad k = 0, 1, 2.
+   \]
+
+   Then, we calculate the sizes of these sets:
+   \[
+   |S_0| = \left\{ 3, 6, 9, \ldots, 99 \right\}, \quad \frac{99 - 3}{3} + 1 = 33,
+   \]
+   \[
+   |S_1| = \left\{ 1, 4, 7, \ldots, 100 \right\}, \quad \frac{100 - 1}{3} + 1 = 34,
+   \]
+   \[
+   |S_2| = \left\{ 2, 5, 8, \ldots, 98 \right\}, \quad \frac{98 - 2}{3} + 1 = 33.
+   \]
+
+2. **Identifying valid pairs \(\{a, b\} \)**:
+
+   We need \( a + b = 3c \), which implies:
+   - If \( a \) and \( b \) both belong to \( S_0 \) (the elements are congruent to 0 mod 3)
+   - If one element belongs to \( S_1 \) and the other to \( S_2 \) (the elements have combined residues summing to 0 mod 3)
+
+   For pairs in \( S_0 \):
+   \[
+   \text{The number of unordered pairs} \{a, b\} = \binom{33}{2}.
+   \]
+
+   For pairs with one element in \( S_1 \) and another in \( S_2 \):
+   \[
+   \text{The number of such pairs} = 33 \times 34.
+   \]
+
+3. **Counting total valid combinations**:
+
+   The total number of pairs \(\{a, b\}\) that satisfy \( a + b \equiv 0 \pmod{3} \) is:
+   \[
+   \binom{33}{2} + 33 \times 34.
+   \]
+
+4. **Excluding invalid pairs where \(a = 2b\) or \(b = 2a\)**:
+
+   We need to exclude pairs such that \(a = 2b\) or \(b = 2a\):
+   - Since \( a \neq b \), consider pairs of the form \(\{k, 2k\}\) for \( k = 1, 2, \ldots, 50 \):
+   \[
+   \text{There are 50 such pairs}.
+   \]
+
+5. **Calculating the final count**:
+   \[
+   \text{Total} = \binom{33}{2} + 33 \times 34 - 50.
+   \]
+
+   Expanding and computing these values:
+   \[
+   \binom{33}{2} = \frac{33 \times 32}{2} = 528,
+   \]
+   \[
+   33 \times 34 = 1122,
+   \]
+   \[
+   528 + 1122 - 50 = 1600.
+   \]
+
+Finally, the number of 3-element subsets \( A \) of \( S \) satisfying the given condition is:
+\[
+\boxed{1600}
+\]",Combinatorics,"Standard combinatorics problem, should be relatively easy to formalize without too much effort"
+9590," 
+Peter Ivanovich, along with 49 other men and 50 women, are seated in a random order around a round table. We call a man satisfied if a woman is sitting next to him. Find:
+
+a) The probability that Peter Ivanovich is satisfied.
+
+b) The expected number of satisfied men.","
+#### Part (a)
+1. **Understanding the Problem**: We need to find the probability that Petr Ivanovich is satisfied. According to the problem, Petr Ivanovich is satisfied if at least one of the people sitting next to him is a woman.
+2. **Complementary Event**: Petr Ivanovich is not satisfied if both people sitting next to him are men.
+3. **Calculating the Probability of the Complementary Event**:
+    - Total people excluding Petr Ivanovich: \(49\) men and \(50\) women.
+    - Probability that the person to Petr Ivanovich's left is a man:
+      \[
+      \frac{49}{99}
+      \]
+    - Probability that the person to Petr Ivanovich's right is also a man (given the first person is a man):
+      \[
+      \frac{48}{98}
+      \]
+    - Hence, the probability that both neighbors are men:
+      \[
+      \frac{49}{99} \cdot \frac{48}{98}
+      \]
+4. **Simplifying the Expression**:
+    - Calculate the fraction step by step:
+      \[
+      \frac{49 \cdot 48}{99 \cdot 98} = \frac{49 \cdot 48}{99 \cdot 98} = \frac{49}{99} \cdot \frac{48}{98} = \frac{7}{14} \cdot \frac{24}{49} = \frac{12}{49} = \frac{8}{33}
+      \]
+5. **Finding the Desired Probability**:
+    - The probability that Petr Ivanovich is satisfied is the complement of the above probability:
+      \[
+      1 - \frac{8}{33} = \frac{33}{33} - \frac{8}{33} = \frac{25}{33}
+      \]
+
+**Conclusion**: The probability that Petr Ivanovich is satisfied is:
+\[
+\boxed{\frac{25}{33}}
+\]
+
+#### Part (b)
+1. **Understanding the Problem**: We need to find the expected number of satisfied men.
+2. **Probability for One Man**: From Part (a), the probability that any given man is satisfied:
+    \[
+    \frac{25}{33}
+    \]
+3. **Linearity of Expectation**: The expected number of satisfied men is the sum of the expected satisfaction of each individual man, given that there are 50 men.
+4. **Calculation**:
+    \[
+    E(X) = 50 \cdot \frac{25}{33} = \frac{1250}{33}
+    \]
+
+**Conclusion**: The expected number of satisfied men is:
+\[
+\boxed{\frac{1250}{33}}
+\]",Combinatorics,"Probability problem with non-formal concepts, interesting to see if we can formalize this kind of problems"
+107461,"In a $5 \times 5$ matrix $X$, each element is either 0 or 1. Let $x_{i, j}$ (where $i, j = 1, 2, \cdots, 5$) represent the element in the $i$-th row and $j$-th column of $X$. Consider all 24 five-element ordered arrays in the rows, columns, and diagonals of $X$:
+$$
+\left(x_{i, 1}, x_{i, 2}, \cdots, x_{i, 5}\right),\left(x_{i, 5}, x_{i, 4}, \cdots, x_{i, 1}\right),
+$$
+where $i=1, 2, \cdots, 5$;
+$$
+\left(x_{1, j}, x_{2, j}, \cdots, x_{5, j}\right),\left(x_{5, j}, x_{4, j}, \cdots, x_{1, j}\right),
+$$
+where $j=1, 2, \cdots, 5$;
+$$
+\begin{array}{l}
+\left(x_{1, 1}, x_{2, 2}, \cdots, x_{5, 5}\right),\left(x_{5, 5}, x_{4, 4}, \cdots, x_{1, 1}\right), \\
+\left(x_{1, 5}, x_{2, 4}, \cdots, x_{5, 1}\right),\left(x_{5, 1}, x_{4, 2}, \cdots, x_{1, 5}\right).
+\end{array}
+$$
+
+If all these arrays are pairwise distinct, find the possible values for the sum of all the elements in the matrix $X$.","
+1. First, denote the set of the 24 five-element sequences derived from the 5x5 matrix as $T$. Each sequence is either a row, a column, or a diagonal of the matrix, both in forward and reverse order.
+
+2. Define a five-element sequence $(a, b, c, d, e)$ as a ""palindromic sequence"" if and only if $a = e$ and $b = d$. 
+
+3. For every sequence 
+   \[
+   \alpha = (a_1, a_2, \cdots, a_5) \in T,
+   \]
+   note that the reverse sequence 
+   \[
+   \beta = (a_5, a_4, \cdots, a_1) \in T.
+   \]
+   Given that $\alpha \neq \beta$, $\alpha$ cannot be a palindromic sequence. Because all elements are either 0 or 1, there are $2^5$ total possibilities for a five-element sequence, out of which there are $2^3 = 8$ palindromic sequences (because a palindromic sequence is determined by the values of only 3 elements, the middle 3). This explains that $T$ consists precisely of $2^5 - 2^3 = 24$ five-element non-palindromic sequences.
+
+4. Let $S_\alpha$ be the sum of the elements in $\alpha$. Then consider 
+   \[
+   \sum_{\alpha \in T} S_\alpha.
+   \]
+
+5. Pair each sequence $\alpha = (a_1, a_2, \cdots, a_5) \in T$ with its complement $\alpha' = (1 - a_1, 1 - a_2, \cdots, 1 - a_5) \in T$. It follows that 
+   \[
+   S_\alpha + S_\alpha' = 5.
+   \]
+   Since $\alpha$ and $\alpha'$ differ at each position and, by our earlier analysis, $\alpha \neq \alpha'$, $T$ can be paired into 12 such pairs. Therefore, 
+   \[
+   \sum_{\alpha \in T} S_\alpha = 12 \times 5 = 60.
+   \]
+
+6. Examine the contributions to 
+   \[
+   \sum_{\alpha \in T} S_\alpha
+   \]
+   from each element in the matrix. The center element $x_{3,3}$ of $X$ is counted in 8 sequences. The elements at the ends of the diagonals $(x_{1,1}, x_{2,2}, \cdots x_{5,5}$ and $x_{1,5}, x_{2,4}, \cdots, x_{5,1})$ are counted in 6 sequences. Every other element is counted in 4 sequences.
+
+7. Therefore,
+   \[
+   8x_{3,3} + 6(x_{1,1} + x_{2,2} + x_{4,4} + x_{5,5} + x_{1,5} + x_{2,4} + x_{4,2} + x_{5,1}) + 4 \left( \sum_{\text{others}} x_{i,j} \right) = 60.
+   \]
+   
+   Combining the inner sums and recognizing that both can be summarized using $S$, the total sum of all matrix elements,
+   \[
+   8x_{3,3} + 6(x_{1,1} + x_{2,2} + x_{4,4} + x_{5,5} + x_{1,5} + x_{2,4} + x_{4,2} + x_{5,1}) + 4S = 60.
+   \]
+
+8. Let $\Sigma$ be the sum $\Sigma = x_{1,1} + x_{2,2} + x_{4,4} + x_{5,5} + x_{1,5} + x_{2,4} + x_{4,2} + x_{5,1}$. Thus,
+   \[
+   2x_{3,3} + 2 \Sigma + 2 S = 60 \implies x_{3,3} + \Sigma + S = 30.
+   \]
+
+9. From the previous equations, 
+   \[
+   S \leq 15,
+   \]
+   because the highest possible value for the sum of all elements in a 5x5 binary matrix is 25, and the sum in this equation is 30 minus differences involving $x_{i,j}$ components.
+
+10. Explore different values of $S$:
+
+    - **$S = 15$**: Then all sequences, including $x_{3,3}=1$, create palindromic sequences, which contradicts our conditions:
+      \[
+      \boxed{Contradiction}.
+      \]
+      
+    - **$S = 14$**: Testing $x_{3,3}=1$:
+      \[
+      \begin{align*}
+      x_{1,1} = x_{2,2} = x_{4,4} = x_{5,5} = x_{1,5} = x_{2,4} = x_{4,2} = x_{5,1} = 0,
+      \end{align*}
+      \]
+      creates another contradiction.
+
+    - **$S = 13$: One viable matrix satisfying non-palindromic conditions could be:
+      \[
+      X_0 = \begin{pmatrix}
+      1 & 0 & 0 & 0 & 0 \\
+      1 & 1 & 1 & 1 & 0 \\
+      1 & 1 & 0 & 0 & 1 \\
+      0 & 0 & 1 & 0 & 1 \\
+      1 & 1 & 1 & 0 & 0 \\
+      \end{pmatrix}.
+      \]
+
+    - **If $S \leq 12$: By swapping 0s and 1s in all inputs**, valid matrices remain consistent with requirements.
+
+11. Hence:
+   - Conclusion:
+   \[
+   \boxed{12, 13}.
+   \]",Combinatorics,Would be nice to have some matrix formalization
+63418,"Given a $100 \times 100$ grid where the cells are colored in black and white such that every column has an equal number of black cells, while each row has a different number of black cells. What is the maximum possible number of adjacent pairs of differently colored cells?","1. Number the rows from top to bottom and the columns from left to right with numbers from 1 to 100.
+
+2. Let each row have a distinct number of black cells ranging from 0 to 99. We can denote the number of black cells in the rows as follows: $a_i$ for the $i$-th row, where $a_i$ can be any integer from 0 to 99 inclusive without repetition.
+
+3. Given that each column has an equal number of black cells, and there are $100 \times 50 = 5000$ black cells in total, we have the equation:
+   \[
+   \sum_{i=1}^{100} a_i = 5000.
+   \]
+
+4. Consider the total number of black cells across the rows:
+    \[
+    \sum_{i=1}^{100} a_i = \sum_{i=0}^{99} i = \frac{99 \times 100}{2} = 4950.
+    \]
+
+5. However, since the sum in reality is 5000, this means there is a discrepancy we should account for. We should effectively have $a_k = 50$ (i.e., removing the number 50 from the total):
+   \[
+    \sum_{i=1}^{100} a_i = 4950 + 50 = 5000. 
+   \]
+
+6. Given that each column contains exactly 50 black cells, we now move to count the number of differently colored neighboring pairs in the entire grid. This will involve calculating these pairs both horizontally and vertically.
+
+### Horizontal Pairs Calculation:
+7. Consider rows with fewer than 50 black cells, the maximum number of different-colored pairs they can have along a row:
+   \[
+   \binom{100}{2} - \binom{100 - n}{2} = n(100 - n).
+   \]
+
+8. For rows with more than 50 black cells, use the same calculation on the remaining white cells. Since $n(100 - n)$ reaches its maximum value at $n = 50$:
+   \[
+   n(100 - n) = 2500.
+   \]
+
+9. Hence, combining our evaluations, each row that can contain at most 50 black cells achieves its maximum at 50 different-color neighboring pairs.
+   \[
+   \sum_{i=0}^{49} 98 + i = 49 \times 99.
+   \]
+
+### Vertical Pairs Calculation:
+10. Consider now the different-colored pairs vertically. For each row, the number of black cells can vary, but since the total is fixed, we count vertical pairs differently. Given there are two adjacent rows with index:
+    \[
+    (r_i, c_j) \text{ and } (r_{i+1}, c_j),
+    \]
+
+their sum must fit within the constraints, so effectively:
+
+11. The calculations for the arrays mean we maximize by ensuring all other rows also achieve their theoretical limits similarly.
+
+### Conclusion: 
+The computed sum of differently colored neighboring cells across the grid is:
+\[
+4900 + 9851 = 14751.
+\]
+
+Thus the maximum possible number of differing-colored neighboring cell pairs in a $100 \times 100$ grid is:
+\[
+\boxed{14751}.
+\]",Combinatorics,Combinatorics problem easy to autoformalize
+97722,"A standard deck of cards has 52 cards after removing the Jokers. If 5 cards are drawn at random from this deck, what is the probability that at least two of them have the same number (or letter $J, Q, K, A$)? Calculate this probability to two decimal places.","
+We are given a deck of 52 cards (after removing the two jokers) and we need to calculate the probability of drawing at least two cards with the same rank during a random draw of 5 cards. Here are the steps to solve this:
+
+1. **Total Number of Ways to Draw 5 Cards from 52:**
+   The total number of ways to draw 5 cards out of 52 is given by the combination formula \( \binom{n}{r} \). Here \( n = 52 \) and \( r = 5 \).
+   \[
+   C_{52}^{5} = \binom{52}{5} = \frac{52!}{5!(52-5)!}
+   \]
+
+2. **Number of Ways to Draw 5 Cards with All Different Ranks:**
+   Since the deck has 13 different ranks and each rank appears 4 times, the number of ways to draw 5 cards such that all ranks are different is:
+   \[
+   C_{13}^{5} \cdot (4^5)
+   \]
+   Here, \( C_{13}^{5} \) represents choosing 5 different ranks from the 13 available, and \( 4^5 \) represents choosing one card from each of the chosen 5 ranks (since each rank has 4 cards).
+
+   Now, let's compute the above values:
+   \[
+   C_{13}^{5} = \binom{13}{5} = \frac{13!}{5!(13-5)!} = \frac{13 \times 12 \times 11 \times 10 \times 9}{5 \times 4 \times 3 \times 2 \times 1} = 1287
+   \]
+   Therefore, the number of ways to draw 5 cards with all different ranks is:
+   \[
+   C_{13}^{5} \cdot 4^5 = 1287 \times 4^5 = 1287 \times 1024 = 1314816
+   \]
+
+3. **Probability of Drawing 5 Cards with All Different Ranks:**
+   The probability \( P(\bar{E}) \) of drawing 5 cards with all different ranks is thus:
+   \[
+   P(\bar{E}) = \frac{C_{13}^{5} \times 4^5}{C_{52}^{5}}
+   \]
+
+   Recall from step 1 \( C_{52}^{5} \):
+   \[
+   C_{52}^{5} = \binom{52}{5} = \frac{52!}{5!(52-5)!} = \frac{52 \times 51 \times 50 \times 49 \times 48}{5 \times 4 \times 3 \times 2 \times 1} = 2598960
+   \]
+
+   So:
+   \[
+   P(\bar{E}) = \frac{1314816}{2598960}
+   \]
+
+4. **Simplification:**
+   Simplify \( \frac{1314816}{2598960} \):
+   \[
+   \frac{1314816}{2598960} \approx 0.50687 \approx 0.507
+   \]
+
+5. **Probability of Drawing at Least Two Cards with the Same Rank:**
+   The probability \( P(E) \) of having at least two cards with the same rank is the complement of \( P(\bar{E}) \):
+   \[
+   P(E) = 1 - P(\bar{E}) = 1 - 0.507 = 0.493 \approx 0.49
+   \]
+
+### Conclusion:
+\[
+\boxed{0.49}
+\]",Combinatorics,Simple probability problem
+127405,"Each unit square of a \( 4 \times 4 \) square grid is colored either red, green, or blue. Over all possible colorings of the grid, what is the maximum possible number of L-trominos that contain exactly one square of each color? (L-trominos are made up of three unit squares sharing a corner.)","
+1. **Identify the Basic Unit for Counting L-Trominos:**
+   Each unit square in a \(4 \times 4\) grid can be part of multiple $L$-trominos. Consider where $L$-trominos could be formed. An $L$-tromino comprises three squares sharing a common corner, e.g., as shown below:
+   \[
+   \begin{array}{| c | c |}
+       \hline
+       & \\
+       \hline
+       & \\
+       \hline
+   \end{array}
+   \]
+
+2. **Classify the \( L \)-trominos in a \( 2 \times 2 \) Subgrid:**
+   For any \(2 \times 2\) subgrid in our \(4 \times 4\) grid:
+   \[
+   \begin{array}{|c|c|}
+   \hline
+   A & B \\
+   \hline
+   C & D \\
+   \hline
+   \end{array}
+   \]
+   There are four possible $L$-trominos:
+   \[
+   \begin{array}{c c}
+   \{A, B, C\}, & \{A, B, D\}, \\
+   \{A, C, D\}, & \{B, C, D\}. 
+   \end{array}
+   \]
+
+3. **Use the Pigeonhole Principle:**
+   By the pigeonhole principle, among the four squares, some color must appear twice since there are only three colors. 
+
+4. **Determine the Distribution of Colors:**
+   We want each \(L\)-tromino to have exactly one \(red\), one \(green\), and one \(blue\) square.
+
+5. **Maximize the Number of Such \( L \)-trominos:**
+   To ensure the maximum number of \( L \)-trominos with one square of each color, arrange such that each \(2 \times 2\) square has two possible sets of \( L \)-trominos.
+
+6. **Construct a Valid Coloring Scheme:**
+   Color the grid such that squares $(x, y)$ follow the rule:
+   - Red if \(x + y\) is even,
+   - Green if \(x\) is odd and \(y\) is even,
+   - Blue if \(x\) is even and \(y\) is odd.
+
+   This leads to coloring like:
+   \[
+   \begin{array}{|c|c|c|c|}
+   \hline
+   R & B & R & B \\
+   \hline
+   G & R & G & R \\
+   \hline
+   R & B & R & B \\
+   \hline
+   G & R & G & R \\
+   \hline
+   \end{array}
+   \]
+
+7. **Calculate the Number of \(2 \times 2\) Subgrids:**
+   In a \(4 \times 4\) grid, there are \(9\) such \(2 \times 2\) subgrids.
+
+8. **Calculate the Total Maximum Number of \( L \)-trominos:**
+   Since each \(2 \times 2\) subgrid can have at most \(2\) such \(L\)-trominos, the total number is:
+   \[
+   9 \times 2 = 18
+   \]
+
+### Conclusion:
+\[
+\boxed{18}
+\]",Combinatorics,Combinatorics problem
+78488,"
+Students in a class form groups each of which contains exactly three members such that any two distinct groups have at most one member in common. Prove that, when the class size is 46, there is a set of 10 students in which no group is properly contained.","
+1. **Definitions and Initial Setup**:
+   Let \(C\) be the set of all 46 students in the class. Define \( s \): the maximum size of a subset \( S \subseteq C \) in which no group (composed of exactly three members each) is properly contained.
+
+   \[
+   s := \max \{ |S| : S \subseteq C \text{ and } S \text{ contains no group properly}\}
+   \]
+
+2. **Objective**:
+   We aim to show that \( s \geq 10 \).
+
+3. **Contradiction Assumption**:
+   Suppose for contradiction that \( s \leq 9 \). Let \( S \) be a subset of \( C \) with \( |S| = s \). In this subset \( S \), no group is properly contained.
+
+4. **Consider a Student Outside \( S \)**:
+   Take any student \( v \) from outside \( S \). Due to the maximality of \( s \), there must be a group that includes \( v \) and two other students from \( S \).
+
+5. **Counting Possible Groups**:
+   The number of ways to choose two students from \( S \) is given by the combination formula:
+
+   \[
+   \binom{s}{2} \leq \binom{9}{2} = 36
+   \]
+
+   This represents the number of possible pairs that can be formed from the set \( S \).
+
+6. **Students Outside \( S \)**:
+   There are \( 46 - s \geq 46 - 9 = 37 \) students outside \( S \). Note that this number is greater than the 36 possible pairs in \( S \).
+
+7. **Existence of a Student Not in Any Group with Two from \( S \)**:
+   Since there are 37 students and only 36 possible pairs from \( S \), by the pigeonhole principle, there exists at least one student \( u \) who does not belong to any group with any pair of students from \( S \).
+
+   - This is because any additional student besides the 36 required to fill the groups will necessarily not form a group with any combination of two students from \( S \).
+
+8. **Contradiction**:
+   Since adding such a \( u \) to \( S \) does not form a complete group of three, \( S \) can be enlarged by including \( u \). This directly contradicts the assumption that \( S \) was of maximal size \( s \).
+
+9. **Conclusion**:
+   Thus, our initial assumption \( s \leq 9 \) must be false. Hence, \( s \geq 10 \).
+
+   \[
+   \boxed{s \geq 10}
+   \]
+
+This completes the proof that there is a set of at least 10 students in which no group of exactly three members is properly contained.",Combinatorics,Combinatorics
+6395,"In a \(3 \times 3\) table, 9 numbers are arranged such that all six products of these numbers in the rows and columns of the table are different. What is the maximum number of numbers in this table that can be equal to one?","
+1. **Setup the problem:**
+    We are given a $3 \times 3$ table filled with 9 numbers such that the product of the numbers in any row and any column are all distinct. We need to determine the maximum possible number of 1's in this table.
+
+2. **Problem Analysis:**
+    We first define the ""index of the table"" to be the total number of its rows and columns that consist entirely of 1's. According to the problem statement, no two rows or two columns can share the same product, thus the index of the table is limited to 1. Let $n$ denote any element in the table that is different from 1.
+
+3. **Requirement for distinct products:**
+    Considering a number $n$ (different from 1) in one of the rows or columns, for the products in each row and column (that contains $n$) to be distinct, there must be at least one more element in that row or column that is also different from 1. Otherwise, the product would simply be $n$, which would violate the given condition of distinct products. Hence, non-1 elements must appear in pairs, i.e., \(n_1, n_2\) so that their product with the other numbers yields different values. 
+
+4. **Pairing of non-1 elements:**
+    The number of such pairs must ensure that the total number of non-1 elements is at least 4. If we attempt fewer pairs, the combinations would either fail to satisfy the distinct product condition or the index would exceed the allowed limit.
+
+5. **Ensuring minimum non-1 elements:**
+    Given that the non-1 elements must appear as pairs, the structure of the $3 \times 3$ grid ensures there must be at least two distinct pairs, hosting each in different rows and columns to maintain distinctiveness in their product. Therefore, we determine that a minimum of 4 elements must be non-1, hence, the remaining elements (1's) can at most total 5:
+    \[
+    9 \text{ (total elements)} - 4 \text{ (minimum non-1 elements)} = 5 \text{ (maximum 1's)}.
+    \]
+
+6. **Verification by constructing an example:**
+    Let's construct a table using the observed maximum number of 1's (5), ensuring that the row and column products remain distinct:
+    \[
+    \begin{array}{|c|c|c|}
+    \hline
+    1 & 1 & 1 \\
+    \hline
+    1 & 2 & 3 \\
+    \hline
+    5 & 7 & 1 \\
+    \hline
+    \end{array}
+    \]
+
+    - Row products: $1 \times 1 \times 1 = 1$, $1 \times 2 \times 3 = 6$, $5 \times 7 \times 1 = 35$.
+    - Column products: $1 \times 1 \times 5 = 5$, $1 \times 2 \times 7 = 14$, $1 \times 3 \times 1 = 3$.
+    
+    Clearly, all products in the rows and columns are unique.
+
+### Conclusion:
+The maximum number of 1's in this $3 \times 3$ table, ensuring that row and column products are distinct, is therefore:
+\[
+\boxed{5}
+\]",Combinatorics,Combinatorics/logic
+1514,"In a $5 \times 5$ grid, place 6 crosses such that each row and each column contains at least one cross. How many ways can this be done?","
+1. To begin with, we note that the problem requires placing 6 crosses in a $5 \times 5$ grid such that each row and each column contains at least one cross.
+
+2. Since there are 6 crosses and they must cover 5 rows and 5 columns, one row \(a\) and one column \(b\) must each contain exactly 2 crosses, while all other rows and columns contain exactly one cross.
+
+3. **Choosing row $a$ and column $b$:**
+   - There are \(5\) choices for selecting the row \(a\).
+   - There are \(5\) choices for selecting the column \(b\).
+   
+   Hence, there are:
+   \[
+   5 \times 5 = 25
+   \]
+   ways to choose the row and column that will contain 2 crosses each.
+
+4. **Case 1: The cross is on the intersection of row $a$ and column $b$:**
+   - This implies there is a cross at the cell \((a, b)\).
+   - For each of the remaining 4 rows, we can choose any of the 4 columns other than $b$ because $b$ is already occupied.
+   
+     Thus, the positions for these 4 crosses can be chosen in:
+     \[
+     4 \times 4 = 16
+     \]
+   ways.
+   - The remaining 3 rows and 3 columns form a $3 \times 3$ grid, and we need to place the remaining 3 crosses such that each row and column contains exactly one cross. This corresponds to the number of permutations of 3 elements, which is:
+     \[
+     3! = 6
+     \]
+   ways.
+   - Therefore, the number of ways to arrange the crosses in this case is:
+     \[
+     25 \times 16 \times 6 = 2400
+     \]
+
+5. **Case 2: The cross is not on the intersection of row $a$ and column $b$:**
+   - This means each of \(a\) and \(b\) will have two crosses but not at the intersection \((a, b)\).
+   - We choose 2 positions from the 4 remaining positions in row \(a\), which can be done in:
+     \[
+     \binom{4}{2} = 6
+     \]
+   ways.
+   - Similarly, for column \(b\), we also have:
+     \[
+     \binom{4}{2} = 6
+     \]
+   ways.
+   - The remaining two rows and two columns need to place the last two crosses, which again corresponds to the number of permutations of 2 elements, which is:
+     \[
+     2! = 2
+     \]
+   ways.
+   - Therefore, the number of ways to arrange the crosses in this case is:
+     \[
+     25 \times 6 \times 6 \times 2 = 1800
+     \]
+
+6. **Combining both cases:**
+   - Total number of ways = Number of ways in Case 1 + Number of ways in Case 2:
+     \[
+     2400 + 1800 = 4200
+     \]
+
+### Conclusion:
+Hence, the total number of ways to place 6 crosses in the \(5 \times 5\) grid such that each row and each column contains at least one cross is:
+\[
+\boxed{4200}
+\]",Combinatorics,Interesting to see how hard it is to formalize these more descriptive open-ended problems
+123765,"If \( A \) is a set of positive integers, take the set \( A' \) to be all elements which can be written as \( \pm a_1 \pm a_2 \ldots \pm a_n \), where \( a_i \) are distinct elements of \( A \). Similarly, form \( A"" \) from \( A' \). What is the smallest set \( A \) such that \( A"" \) contains all of \( 1, 2, 3, \ldots, 40 \)?","
+1. **Understanding the problem**: We need to determine the smallest set $A$ such that $A''$ (formed by taking all possible sums and differences of elements in $A'$) contains all integers from $1$ to $40$. 
+
+2. **Set notation and initial assumptions**: Let's consider a set $A = \{a_1, a_2, \ldots, a_k\}$. We'll form $A'$ which includes all numbers of the form $\pm a_1 \pm a_2 \pm \ldots \pm a_k$. Then, $A''$ will be formed by applying the same process to the set $A'$.
+
+3. **Example for $A = \{1, 5, 25\}$**:
+    - We calculate $A'$ by taking all possible sums and differences ($\pm$) of elements:
+    \[
+    \begin{aligned}
+    A' &= \{\pm 1, \pm 5, \pm 25, \pm (1 + 5), \pm (1 - 5), \pm (1 + 25), \pm (1 - 25), \pm (5 + 25), \\
+    & \quad \pm (5 - 25), \pm (1 + 5 + 25), \pm (1 + 5 - 25), \ldots\}.
+    \end{aligned}
+    \]
+    - Explicitly calculate these:
+        \[
+        \begin{aligned}
+        &\{-30, -24, -20, -19, -18, -14, -5, -4, 0, 1, 2, 4, 5, 6, 10, 14, 19, 20, 24, 25, 26, 29, 30, 31 \}.
+        \end{aligned}
+        \]
+    - Hence, $A''$ will then automatically include more numbers, theoretically covering $1$ to $40$ considering $\pm$ operations from elements in $A'$.
+
+4. **Checking minimal condition**:
+    - Consider if we could manage with a smaller subset:
+    - Let’s check with only two elements, $A = \{a, b\}$. We compute $A'$:
+    \[
+    A' = \{ \pm a, \pm b, \pm (b-a), \pm (b+a)\}.
+    \]
+    - The total possible sums are $81$ (from combinations), but eliminated the zero element and making sure distinct pairs covering from $1$ to $40$ is impossible as we confirm by checking inequalities:
+    - $\boxed{2}$ elements would be insufficient as the max elements under permutations $\pm$ and combinations would yield less than $40$ non_duplicate entities.
+
+5. **Conclusion**:
+    Given that with $\{1, 5, 25\}$, we obtain all elements from $1$ to $40$:
+
+\(\boxed{\{1, 5, 25\}}\)",Combinatorics,Interesting to see how hard it is to formalize these more descriptive open-ended problems
+34634,"30 teams participate in a football championship. Every two teams must play one match against each other. Prove that at any moment during the competition, there are two teams that have played the same number of matches up to that point.","
+1. **Confirm the Total Number of Teams**:
+   We are given that there are 30 teams participating in the tournament.
+   
+2. **Determine the Maximum Number of Matches Played by a Team**:
+   Each team can play at most \(29\) matches because each team must play against every other team once:
+   \[
+   \text{Maximum number of matches per team} = 30 - 1 = 29
+   \]
+
+3. **State the Pigeonhole Principle**:
+   The Pigeonhole Principle states that if \(n\) items are put into \(m\) containers, with \(n > m\), then at least one container must contain more than one item.
+
+4. **Apply the Pigeonhole Principle**:
+   Let's consider the number of matches each team has played. The number of matches can be any whole number from \(0\) to \(29\), which provides \(30\) possible values.
+
+   In any given moment during the tournament, each of the \(30\) teams has played a certain number of matches. However, because the number of matches each team can play ranges from \(0\) to \(29\) (inclusive), there are at most \(30\) different numbers (values) that can be assigned to the number of matches a team has played so far.
+
+5. **Count the Teams and Possible Number of Matches**:
+   We have \(30\) teams, and the potential distinct values for the number of matches played are \(30\) (from \(0\) to \(29\)).
+   
+6. **Derive the Contradiction for Distinct Matches Played**:
+   If all \(30\) teams had played a different number of matches, they would have to have played \(30\) different amounts of matches. This is impossible because only \(30\) possible amounts of matches exist. Therefore, at any point in the period of the tournament, if all \(30\) teams play matches, at least two teams must have played the same number of matches, by the Pigeonhole Principle.
+
+### Conclusion:
+
+There must be at least two teams that have played the same number of matches at any given point in time during the tournament. Hence, we have proved that, in any moment of the tournament, there exist at least two teams that have played the same number of matches.
+
+\[\blacksquare\]",Combinatorics,Interesting to see how hard it is to formalize these more descriptive open-ended problems
+51421,"2000 apples are placed in several baskets. It is allowed to remove baskets and take apples out of the baskets. Prove that it is possible to achieve a situation where all the remaining baskets have an equal number of apples, and the total number of apples is no less than 100.","
+Let's assume the given statement is false. That is, it is not possible to arrange the apples such that each remaining basket has an equal number of apples, and the total number of apples is at least 100. We will aim to show that this assumption leads to a contradiction.
+
+1. **Initial Setup and Contradiction Hypothesis:**
+   - Suppose it is not possible to arrange the apples in such a way that each remaining basket has the same number of apples, with the total being at least 100.
+   - This means that each remaining basket contains fewer than 100 apples. 
+
+2. **Case 1: More Than 100 Non-Empty Baskets:**
+   - If we have more than 100 baskets (each containing at least 1 apple), then we can remove all but one apple from each basket until we are left with 100 baskets each containing exactly one apple.
+   - The total number of apples in this scenario is 100, which contradicts our initial assumption (that it isn't feasible to have baskets with equal apples totaling at least 100).
+
+3. **Case 2: Fewer Than 100 Non-Empty Baskets:**
+   - If the number of non-empty baskets is fewer than 100, let's denote this number by \( n \) where \( n < 100 \).
+   - Because removing one or more baskets or apples from a basket does not change the feasibility of equal distribution in the remaining baskets, we need to consider the redistribution of apples.
+
+4. **Redistribution Feasibility:**
+   - If there are fewer than 100 non-empty baskets, and each basket has fewer than 100 apples, then the total number of apples, \( S \), is
+     \[
+     S = \sum_{i=1}^{n} a_i \quad \text{where} \quad a_i < 100 \quad \text{for all} \quad 1 \leq i \leq n
+     \]
+   - Since the total number of apples is initially 2000, this implies \( S \leq n \times 100 \).
+
+5. **Contradiction Derived from the Total Count:**
+   - Given that \( n < 100 \) and each \( a_i < 100 \), even if the total sum \( S \) is maximized under these conditions, it cannot exceed \( 100 \times n \). 
+     \[
+     S = 100n < 100 \times 100 = 10000
+     \]
+   - This total is clearly less than the initial total of 2000 apples, which shows there is a possibility to redistribute the apples among fewer baskets and still maintain 100 apples.
+
+6. **Conclusion:**
+   - Because we derived a contradiction from our assumption, the original statement must be true.
+   - Therefore, it is indeed possible to rearrange the apples such that each remaining basket contains an equal number of apples and the total number of apples is not less than 100.
+
+Thus, our final conclusion is 
+\[
+\boxed{\text{true}}
+\]
+indicating the given statement is accurate and feasible.",Combinatorics,Combinatorics
+80414,"Prove:
+\[
+\sum_{k=0}^{\left[\frac{m}{2}\right]}(-1)^{k} \binom{m-k}{k} \cdot \frac{1}{m-k} =
+\begin{cases}
+(-1)^{m} \frac{2}{m} & \text{if } 3 \mid m, \\
+(-1)^{m-1} \frac{1}{m} & \text{if } 3 \times m.
+\end{cases}
+\]","
+We start by analyzing the given summation:
+
+\[
+\sum_{k=0}^{\left\lfloor \frac{m}{2} \right\rfloor} (-1)^k C_{m-k}^{k} \cdot \frac{1}{m-k}
+\]
+
+Our goal is to show that this summation equals $\left\{\begin{array}{ll}(-1)^m \frac{2}{m} & \text{if } 3 \mid m, \\ (-1)^{m-1} \frac{1}{m} & \text{if } 3 \times m.\end{array}\right.$
+
+We begin by examining the core term:
+
+\[
+C_{m-k}^{k} \cdot \frac{1}{m-k}
+\]
+
+Rewriting $C_{m-k}^{k}$ using binomial coefficients, we get:
+
+\[
+C_{m-k}^{k} \cdot \frac{1}{m-k} = \frac{(m-k)!}{k!(m-2k)!} \cdot \frac{1}{m-k}
+\]
+
+Now consider:
+
+\[
+C_{m-k}^{k}\left[\frac{1}{m} + \frac{k}{m(m-k)}\right] = \frac{1}{m} \left[ C_{m-k}^{k} + \frac{k \cdot C_{m-k}^{k}}{m-k} \right]
+\]
+
+By simplifying the term $\frac{k \cdot C_{m-k}^{k}}{m-k}$, we know:
+
+\[
+C_{m-k}^{k} + C_{m-k-1}^{k-1} = \frac{(m-k)!}{k!(m-2k)!} + \frac{(m-k-1)!}{(k-1)!(m-2k-1)!}
+\]
+
+Hence,
+
+\[
+C_{m-k}^{k}\left[\frac{1}{m} + \frac{k}{m(m-k)}\right] = \frac{1}{m}\left[ C_{m-k}^{k} + C_{m-k-1}^{k-1} \right]
+\]
+
+Given the binomial expansion properties,
+
+\[
+C_{m-k}^{k} + C_{m-k-1}^{k-1} = (1+x)^{m-k}
+\]
+
+Hence, the integral expression:
+
+\[
+\frac{1}{m}(1+x)^{m-k-1}(1 + 2x)
+\]
+
+Considering the term $x^k$, the coefficient of $x^{m-1}$ is sought for:
+
+\[
+\frac{1}{m}[x(1+x)]^{m-k-1} \cdot (1 + 2x)
+\]
+
+The sum thus formulated,
+
+\[
+\sum_{k=0}^{\left\lfloor \frac{m}{2} \right\rfloor} (-1)^k \frac{1}{m}[x(1+x)]^{m-k-1} \cdot (1 + 2x)
+\]
+
+This sequence meets conditions similar to:
+
+\[
+\frac{1}{m} \sum_{k=0}^{m} (-1)^k [x(1+x)]^{m-k-1}(1 + 2x)
+\]
+
+Using generating functions and properties of the roots of unity ($\omega$),
+
+\[
+\omega = -\frac{1}{2} + \frac{\sqrt{3}}{2}i, \quad \omega^2 = -\frac{1}{2} - \frac{\sqrt{3}}{2}i, \quad \omega^3 = 1, \quad 1 + \omega + \omega^2 = 0
+\]
+
+Considering the function formed,
+
+\[
+f(x) = \frac{(-1)^{m-1}}{m} \frac{1+2x}{1 + x + x^2}
+\]
+
+Evaluating coefficients,
+
+\[
+f(x) = \frac{(-1)^{m-1}}{m} \sum_{k=0}^{\infty} \left[(1 + \omega)\omega^{2k} - \omega^{k+1}\right] x^k
+\]
+
+The coefficient of $x^{m-1}$ gives:
+
+\[
+f(x) = \frac{(-1)^{m-1}}{m} \left[(1+\omega)\omega^{2(m-1)} - \omega^m\right] = \frac{(-1)^m}{m}\left(\omega^m + \omega^{2m}\right)
+\]
+
+Depending on divisibility by 3,
+
+\[
+S_m = \sum_{k=0}^{\left\lfloor \frac{m}{2} \right\rfloor} (-1)^k C_{m-k}^{k} \cdot \frac{1}{m-k} = \boxed{\left\{
+\begin{array}{ll}
+(-1)^m \frac{2}{m} & \text{if } 3 \mid m, \\
+(-1)^{m-1} \frac{1}{m} & \text{if } 3 \nmid m.
+\end{array}
+\right.}
+",Combinatorics,Combinatorial algebraic identity (good for some trace for calculations)
+99504,"Let \( n \) be a positive integer and \( X \) a finite set, and let \( f: X \rightarrow X \) be a mapping such that for any \( x \in X \), \( f^{(n)}(x) = x \), where
+\[
+\begin{aligned}
+f^{(1)}(x) &= f(x), \\
+f^{(i)}(x) &= f\left(f^{(i-1)}(x)\right) \quad (i \geqslant 2).
+\end{aligned}
+\]
+
+Denote \( m_j \) as the number of elements in the set \(\left\{ x \in X \mid f^{(j)}(x) = x \right\}\). For any integer \( k \), prove:
+1. \( \frac{1}{n} \sum_{j=1}^{n} m_j \sin \frac{2jk\pi}{n} = 0 \);
+2. \( \frac{1}{n} \sum_{j=1}^{n} m_j \cos \frac{2jk\pi}{n} \) is a non-negative integer.","### Problem:
+
+Suppose \( n \) is a positive integer, \( X \) is a finite set, and the mapping \( f: X \rightarrow X \) satisfies \( f^{(n)}(x) = x \) for any \( x \in X \). Here, 
+
+\[
+\begin{aligned}
+&f^{(1)}(x) = f(x), \\
+&f^{(i)}(x) = f\left(f^{(i-1)}(x)\right) \text{ for } i \geq 2.
+\end{aligned}
+\]
+
+Let \( m_j \) denote the number of elements in the set \( \{x \in X \mid f^{(j)}(x) = x\} \). For any integer \( k \), prove the following:
+1. \[
+\frac{1}{n} \sum_{j=1}^{n} m_j \sin \frac{2jk\pi}{n} = 0.
+\]
+2. \[
+\frac{1}{n} \sum_{j=1}^{n} m_j \cos \frac{2jk\pi}{n} \text{ is a non-negative integer}.
+\]
+
+
+1. **Proof for \(\frac{1}{n} \sum_{j=1}^{n} m_j \sin \frac{2jk\pi}{n} = 0\)**
+
+    To prove this statement, we first note that the function \( f \) and the sets \( m_j \) are related through the structure of the directed graph \( G \) formed from \( X \) and the map \( f \).
+
+    - **Directed Graph Construction:**
+      
+      Construct a directed graph \( G \) where each vertex represents an element in \( X \) and there is a directed edge from \( x \) to \( y \) if and only if \( f(x) = y \).
+
+    - **Properties:**
+      
+      For any \( x \in X \), since \( f^{(n)}(x) = x \), \( f \) is a permutation of \( X \). Thus, \( G \) is a disjoint union of cycles.
+      
+      Since \( G \) is composed of cycles, and \( f \) is a permutation, \( m_j\) represents the number of fixed points of \( f^j \). Each cycle of length \( l \) in \( G \) contributes to \( m_j \) if and only if \( j \) is a multiple of \( l \).
+
+    - **Summation Calculation:**
+      
+      Let us write the sum in exponential form using Euler's formula \( \sin \theta = \frac{e^{i\theta} - e^{-i\theta}}{2i} \):
+      
+      \[
+      \frac{1}{n} \sum_{j=1}^{n} m_j \sin \frac{2jk\pi}{n} = \frac{1}{2in} \sum_{j=1}^{n} m_j \left(e^{i\frac{2jk\pi}{n}} - e^{-i\frac{2jk\pi}{n}}\right).
+      \]
+      
+      Separating the sum into two parts:
+      
+      \[
+      \frac{1}{2in} \left( \sum_{j=1}^{n} m_j e^{i\frac{2jk\pi}{n}} - \sum_{j=1}^{n} m_j e^{-i\frac{2jk\pi}{n}} \right).
+      \]
+      
+      Since \( f \) is a permutation, the characteristic polynomial of the permutation matrix \( f^j \) will have roots that are \( n \)-th roots of unity. Hence the sum of the exponentials over one period \( n \) will complete a full circle in the complex plane and sum to zero:
+      
+      \[
+      \sum_{j=1}^{n} e^{i\frac{2jk\pi}{n}} = 0
+      \]
+      and similarly,
+      
+      \[
+      \sum_{j=1}^{n} e^{-i\frac{2jk\pi}{n}} = 0.
+      \]
+      
+      Thus,
+      
+      \[
+      \frac{1}{2in} \left( 0 - 0 \right) = 0.
+      \]
+
+    Therefore,
+    
+    \[
+    \frac{1}{n} \sum_{j=1}^{n} m_j \sin \frac{2jk\pi}{n} = 0.
+    \]
+
+2. **Proof for \(\frac{1}{n} \sum_{j=1}^{n} m_j \cos \frac{2jk\pi}{n}\) being a non-negative integer:**
+
+    Similarly, we convert the sum into real and imaginary components using Euler's formula for the cosine function\[
+      \cos \theta = \frac{e^{i\theta} + e^{-i\theta}}{2}:
+      \]
+    Hence,
+    
+    \[
+    \frac{1}{n} \sum_{j=1}^{n} m_j \cos \frac{2jk\pi}{n} = \frac{1}{2n} \sum_{j=1}^{n} m_j \left(e^{i\frac{2jk\pi}{n}} + e^{-i\frac{2jk\pi}{n}}\right).
+    \]
+    
+    Breaking this down, we have:
+    
+    \[
+    \frac{1}{2n} \left( \sum_{j=1}^{n} m_j e^{i\frac{2jk\pi}{n}} + \sum_{j=1}^{n} m_j e^{-i\frac{2jk\pi}{n}} \right).
+    \]
+    
+    - **Dealing with Fixed Points and Cycles:**
+      
+      As before, the summation within the cycles needs to be considered. Each cycle contributes equally to terms where \( j \) is a multiple of the cycle length, simplifying the structure.
+      
+      The primary sum can be rearranged to tackle the well-known consequence of sums of roots of unity:
+      
+      \[
+      \sum_{j=1}^{n} e^{i\frac{2jk\pi}{n}} = 0,
+      \]
+    
+    Breaking this down explicitly and observing that each sum over \( e \)-components averages out over the full cycle contribution. Which tells us:
+    
+    \[
+    \frac{1}{n} \sum_{j=1}^{n} m_j e^{i\frac{2jk\pi}{n}}= \frac{N}{N} \text{ results in symmetry}, 
+    \]
+     leaving only the non-negative integer characteristic result based on proportions over cyclic distribution.
+    
+    Consequently,
+    
+    \[
+    \frac{1}{2n} \left( N' \right)
+    \]
+    given all parts together, precisely multiplying unity meaning inherent cyclical components preserved structurally.
+  
+Thus, completing verification:
+
+\[
+ \boxed {Conclusion}.
+\]
+
+\(\blacksquare\)
+",Combinatorics,Combinatorics + functional equation
+92939,"Given a positive integer \( n \geq 3 \) and a set of people attending a meeting, some of them know each other. If these people can sit around a round table such that each pair of adjacent people know each other, it is considered a ""good"" seating arrangement. Suppose these people cannot be divided into \( n \) groups such that no two people in the same group know each other. Find the largest positive integer \( N \) such that there is always at least one person among them who can participate in at least \( N \) different ""good"" seating arrangements.
+
+Note: A ""good"" seating arrangement can consist of either a single person or two people who know each other, and any rotations that result in the same arrangement are considered the same.","
+Given a positive integer \( n \geq 3 \), some people participate in a meeting, and among them, some know each other. If a subset of people can sit at a round table such that all adjacent people know each other, this seating arrangement is called a ""good"" seating arrangement.
+
+Let's restate the problem in graph theory language. Represent the people as vertices in a graph, with an edge connecting any two vertices if the corresponding persons know each other. The condition given in the problem is that this graph cannot be divided into \( n \) groups, such that each group is a set of people who do not know each other.
+
+Our task is to find the largest integer \( N \) such that there exists a person who can participate in \( N \) different ""good"" seating arrangements.
+
+We start by noting that a ""good"" seating arrangement requires adjacent individuals to know each other. Let's focus on studying the largest complete graph \( K_{n+1} \), which satisfies the problem's requirement, and determine the number of ""good"" seating arrangements by studying permutations of the vertices:
+
+1. Considering different permutations of the vertices:
+    \[
+    1+n+n(n-1)+n(n-1)(n-2)+\dots+n!+n! = n!\sum_{i=0}^{n} \frac{1}{i!}
+    \]
+    This sum involves all permutations and the Stirling numbers of the second kind.
+
+2. The relevant calculation for the above sum is:
+    \[
+    \sum_{i=0}^{n} \frac{1}{i!}
+    \]
+    
+3. When multiplied by \( n! \), the sum approximates:
+    \[
+    n! \left(\sum_{i=0}^{n} \frac{1}{i!} \right) \approx e \cdot n!
+    \]
+    
+    where \( e \) is the base of the natural logarithm.
+
+Given that \( n \geq 3 \), the above argument demonstrates that a person can participate in \( \left\lfloor e \cdot n! \right\rfloor \) distinct ""good"" seating arrangements.
+
+### Conclusion:
+The maximum number \( N \) such that there is a person who can participate in \( N \) different ""good"" seating arrangements is given by rounding down \( e \cdot n! \). Thus:
+\[
+\boxed{[e \cdot n!]}
+\]",Combinatorics,Combinatorics on table sitting with some properties
+6041,What is the maximum number of chess kings that can be placed on a $12 \times 12$ board such that each king attacks exactly one of the others?,"1. **Observation**: Note that two kings attack each other if and only if their cells share at least one common vertex.
+2. **Pair Analysis**:
+   - For each pair of mutually attacking kings, mark the vertices of the cells they occupy.
+   - For each such pair of kings, at least six vertices of the grid will be marked.
+3. **Different Pairs**:
+   - Since different pairs of kings mark different vertices (otherwise, some king would be attacking more than one other king), we can analyze the total vertex count.
+4. **Vertex Counting**:
+   - In a $12 \times 12$ grid, vertices can be counted through the number of small squares forming the grid.
+   - Each grid cell (square) surrounds itself with four vertices. Calculating this gives us $(12+1) \times (12+1) = 169$ vertices.
+5. **Pair Constraints**:
+   - Let’s denote the number of pairs of kings that can mutually attack each other as $p$.
+   - Each pair marks at least 6 vertices, thus $6p \leq 169$.
+6. **Maximize Pairs**:
+   - Simplifying, $p \leq \left\lfloor \frac{169}{6} \right\rfloor = 28$.
+   - Therefore, there are at most 28 pairs of kings.
+7. **King Counting**:
+   - Each pair contributes 2 kings. Thus, the number of kings is $2 \times 28 = 56$.
+
+### Conclusion:
+Thus, the maximum number of kings that can be placed on a $12 \times 12$ board such that each king attacks exactly one other king is:
+$$\boxed{56}$$",Combinatorics,Interesting task to formalize such a combinatorial problem
+126140,"Let \( S \) be the set of points \((x, y, z)\) in \(\mathbb{R}^{3}\) such that \( x \), \( y \), and \( z \) are positive integers less than or equal to 100. Let \( f \) be a bijective map between \( S \) and \(\{1, 2, \ldots, 1000000\}\) that satisfies the following property: if \( x_{1} \leq x_{2} \), \( y_{1} \leq y_{2} \), and \( z_{1} \leq z_{2} \), then \( f(x_{1}, y_{1}, z_{1}) \leq f(x_{2}, y_{2}, z_{2}) \). Define
+\[
+\begin{aligned}
+A_{i} & = \sum_{j=1}^{100} \sum_{k=1}^{100} f(i, j, k), \\
+B_{i} & = \sum_{j=1}^{100} \sum_{k=1}^{100} f(j, i, k), \\
+C_{i} & = \sum_{j=1}^{100} \sum_{k=1}^{100} f(j, k, i).
+\end{aligned}
+\]
+
+Determine the minimum value of \( A_{i+1} - A_{i} + B_{j+1} - B_{j} + C_{k+1} - C_{k} \).","To determine the minimum value of \(A_{i+1} - A_{i} + B_{j+1} - B_{j} + C_{k+1} - C_{k}\), we need to carefully analyze the function \(f\) and the structure of the set \(S\).
+
+1. **Definition and Constraints:**
+
+   Given \(S\) is the set of points \((x, y, z)\) in \(\mathbb{R}^3\) such that \(x, y, z\) are positive integers less than or equal to 100. Therefore, \(|S| = 100 \times 100 \times 100 = 1000000\).
+
+   The function \(f: S \to \{1, 2, \ldots, 1000000\}\) is a bijective map that maintains the order:
+   \[
+   x_1 \leq x_2, y_1 \leq y_2, z_1 \leq z_2 \implies f(x_1, y_1, z_1) \leq f(x_2, y_2, z_2)
+   \]
+
+2. **Function Definitions \(A_i\), \(B_i\), and \(C_i\):**
+   \[
+   A_i = \sum_{j=1}^{100} \sum_{k=1}^{100} f(i, j, k)
+   \]
+   \[
+   B_i = \sum_{j=1}^{100} \sum_{k=1}^{100} f(j, i, k)
+   \]
+   \[
+   C_i = \sum_{j=1}^{100} \sum_{k=1}^{100} f(j, k, i)
+   \]
+
+3. **Difference Expressions:** We need to find the minimum value of the expression:
+   \[
+   A_{i+1} - A_i + B_{j+1} - B_j + C_{k+1} - C_k
+   \]
+
+4. **Coordinate Planes, Lines, and Intersections:**
+   Analyze how changes in \(x\), \(y\), and \(z\) affect the sums while considering the intersections of planes:
+
+   - **Single Line Difference:** The minimum difference along a line is 1.
+   - **Surface (Square) Difference:** For minimizing differences in a square, use four consecutive numbers. The minimum difference for each set of lines on a square summed will be:
+     \[
+     1 + 1 + 1 + 1 + 1 + 1 = 6
+     \]
+   - **Cube Difference:** For points forming a cube with eight consecutive numbers to minimize differences considering all dimensions:
+
+     Here, let's label the points arranged from 1 to 8 optimally:
+     \[
+     1, 2, 3, 4, 5, 6, 7, 8
+     \]
+
+     Analyzing the multiplicative effects:
+     - There is one spot where a number is multiplied by \(-3\).
+     - Three spots where numbers are multiplied by \(-1\).
+     - One spot where a number is multiplied by \(3\).
+     - Three spots where numbers are multiplied by \(1\).
+
+     Place the numbers optimally based on multiplication by \(-3\), \(-1\), \(3\), and \(1\) to minimize the sum:
+     - The point analysis and optimization yield the sum difference of 28.
+
+5. **Total Minimum Value Calculation:**
+   Combining the minimal differences for each coordinate change and summing these values:
+
+   - \(28\) for a cube difference, and
+   - \(3 \times 98\) squares: \(3 \times 98 \times 6 = 1764\).
+   - \(3 \times 98 \times 98\) lines: \(3 \times 9604 = 28812\).
+
+   Sum of all differences:
+   \[
+   28 + 1764 + 28812 = 30604
+   \]
+
+### Conclusion:
+The minimum value of \(A_{i+1} - A_i + B_{j+1} - B_j + C_{k+1} - C_k\) is:
+\[
+\boxed{30604}
+\]",Combinatorics,Functional equation with combinatorial interpretation
+150542,"For how many ordered pairs of positive integers \((a, b)\) is \(1 < a + b < 22\)?","
+1. **Define the inequality conditions:**
+   We need \(1 < a + b < 22\). This inequality can be broken into two parts: \(1 < a + b\) and \(a + b < 22\).
+
+2. **Range for \(b\) when \(a\) is fixed:**
+   For a fixed positive integer \(a\), the inequality \(1 < a + b < 22\) can be rewritten in terms of \(b\):
+   - From \(1 < a + b\), we get \(b > 1 - a\).
+   - From \(a + b < 22\), we get \(b < 22 - a\).
+
+3. **Correct range for \(b\):**
+   Since \(b\) must be a positive integer, and \(b > 1 - a\), it must also satisfy \(b > 0\). Therefore:
+   \[
+   a + 1 \leq b \leq 21 - a
+   \]
+
+4. **Possible values for \((a, b)\):**
+   To have \(b\) as a positive integer, we combine the inequalities:
+   \[
+   1 \leq b \leq 21 - a
+   \]
+   For a given \(a\), the number of possible values of \(b\) is \(21 - (a+1) + 1 = 21 - a\).
+
+5. **Summing the possible values of \(b\):**
+   As \(a\) ranges from 1 to 20, we have each possible count for \(b\):
+   \[
+   \sum_{a=1}^{20} (21 - a)
+   \]
+
+6. **Calculating the total number of pairs:**
+   This sum is an arithmetic series, where the first term \(a_1 = 20\) and the last term \(a_{20} = 1\). The number of terms \(n = 20\).
+   \[
+   \sum_{k=1}^{20} (21 - k) = 20 + 19 + 18 + \cdots + 3 + 2 + 1
+   \]
+   The sum of the first \(n\) positive integers is given by the formula:
+   \[
+   S_n = \frac{n(n+1)}{2}
+   \]
+   Substituting \(n = 20\):
+   \[
+   S_{20} = \frac{20 \times 21}{2} = 210
+   \]
+
+### Conclusion:
+\[
+\boxed{210}
+\]",Combinatorics,Simple autoformalization example
+92552,"Divide the set $\{1,2, \cdots, n\}$ arbitrarily into two subsets. One of these subsets must have 2017 positive integers (not necessarily distinct) $x_{1}, x_{2}, \cdots, x_{2017}$ such that $x_{1} + x_{2} + \cdots + x_{2016} = x_{2017}$. Find the smallest positive integer $n$ satisfying this condition.","
+1. **Understand the problem requirement:**
+   - We need to partition the set $\{1, 2, \ldots, n\}$ into two subsets such that at least one subset contains 2017 elements \(x_1, x_2, \ldots, x_{2017}\) satisfying the equation \(x_1 + x_2 + \cdots + x_{2016} = x_{2017}\).
+   - The goal is to find the smallest integer \(n\) that makes this always possible.
+
+2. **Determine a lower bound:**
+   - Consider a set $A = \{1, 2, \ldots, 2015\} \cup \{2016^2, 2016^2 + 1, \ldots, 2016^2 + 2014\}$ and $B = \{2016, 2017, \ldots, 2016^2 - 1\}$.
+   - Verify that when $n = 2016^2 + 2014 = 4066270$, neither subset $A$ nor $B$ contains 2017 elements satisfying the equation \(x_1 + x_2 + \cdots + x_{2016} = x_{2017}\).
+   - Therefore, if \(n \leq 2016^2 + 2014\), it might be impossible to partition as required. So, we conclude that $n$ must be greater than $2016^2 + 2014 = 4066270$.
+
+3. **Test for the smallest \(n\) satisfying the condition:**
+   - Let \(n = 4066271\), which is one more than $2016^2 + 2014$.
+   - Suppose there exists a partition of $\{1, 2, \ldots, 4066271\}$ into subsets $A$ and $B$ such that none of them satisfies the condition.
+   - Consider first element $1 \in A$. Then $2016 \in B$. By construction, $2016^2 \in A$ since we need to keep balance.
+   - Due to the equation \(4066271 = 2016^2 + 2015 \cdot 1\), it leads to $4066271 \in B$. Accordingly, because $4066271 = 2017 \cdot 2015 + 2016$, it follows that $2017 \in B$.
+
+4. **Find the contradiction:**
+   - If $2017 \in B$ and considering $4066271$ relationship,
+   - We have an inconsistency with the placement of such numerous elements, confirming that with $n = 4066271$, at least one subset must satisfy the equation \(x_1 + x_2 + \cdots + x_{2016} = x_{2017}\).
+
+5. **Conclusion:**
+   - The smallest integer \(n\) for the set $\{1, 2, \ldots, n\}$ to be always partitioned as required is \(4066271\).
+
+\[
+\boxed{4066271}
+\]",Combinatorics,Well phrased mathematical problem with nice proof concepts
