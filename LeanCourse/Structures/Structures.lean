@@ -40,6 +40,8 @@ def add' (a b : Point) : Point where
 
 end Point
 
+#check Point.add
+
 -- You can define structures parameterized on something --
 structure StandardSimplex (n : ℕ) where
   V : Fin n → ℝ
@@ -71,8 +73,7 @@ structure Group₁ (α : Type*) where
   inv_mul_cancel : ∀ x : α, mul (inv x) x = one
 
 -- Let us define an example group of equivalence maps --
-def permGroup {α : Type*} : Group₁ (Equiv.Perm α)
-    where
+def permGroup {α : Type*} : Group₁ (Equiv.Perm α) where
   mul f g := Equiv.trans g f
   one := Equiv.refl α
   inv := Equiv.symm

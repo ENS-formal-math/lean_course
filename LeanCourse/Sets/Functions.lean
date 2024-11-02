@@ -63,6 +63,21 @@ For example, you can define range as `range f = {y | ∃ x, f x = y}` that
 is equivalent to `f '' univ`.
 -/
 
+example : range f = univ ↔ Surjective f := by
+  constructor
+  . intro h y
+    unfold range at h
+    have hy : y ∈ {x | ∃ y, f y = x} := by
+      rw [h]
+      trivial
+    apply hy
+  . intro hsurj
+    ext y
+    simp
+    specialize hsurj y
+    obtain ⟨x, hx⟩ := hsurj
+    use x
+
 example : InjOn log { x | x > 0 } := by
   intro x xpos y ypos
   intro e

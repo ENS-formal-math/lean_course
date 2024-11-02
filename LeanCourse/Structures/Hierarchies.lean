@@ -1,4 +1,9 @@
 import Mathlib.Data.Nat.Notation
+import Mathlib.Algebra.Group.Defs
+import Mathlib.Algebra.Ring.Defs
+import Mathlib.Order.Defs
+import Mathlib.Algebra.Ring.Int
+import Mathlib.Data.SetLike.Basic
 
 -- Here we discuss how to build hierarchy of algebraic structures --
 
@@ -79,3 +84,259 @@ class DiaOneClass₁ (α : Type) extends One₁ α, Dia₁ α where
 
 -- We can just extend --
 class Monoid₁ (α : Type) extends Semigroup₁ α, DiaOneClass₁ α
+
+-- Now we discuss how to define classes with multiple types --
+
+class SMul₃ (α : Type) (β : Type) where
+  /-- Scalar multiplication -/
+  smul : α → β → β
+
+infixr:73 " • " => SMul₃.smul
+
+class AddSemigroup₃ (α : Type) extends Add α where
+/-- Addition is associative -/
+  add_assoc₃ : ∀ a b c : α, a + b + c = a + (b + c)
+
+export AddSemigroup₃ (add_assoc₃)
+
+@[to_additive AddSemigroup₃]
+class Semigroup₃ (α : Type) extends Mul α where
+/-- Multiplication is associative -/
+  mul_assoc₃ : ∀ a b c : α, a * b * c = a * (b * c)
+
+export Semigroup₃ (mul_assoc₃)
+
+class AddMonoid₃ (α : Type) extends AddSemigroup₃ α, AddZeroClass α
+
+@[to_additive AddMonoid₃]
+class Monoid₃ (α : Type) extends Semigroup₃ α, MulOneClass α
+
+class AddCommSemigroup₃ (α : Type) extends AddSemigroup₃ α where
+  add_comm : ∀ a b : α, a + b = b + a
+
+class AddCommMonoid₃ (α : Type) extends AddMonoid₃ α, AddCommSemigroup₃ α
+
+class AddGroup₃ (G : Type) extends AddMonoid₃ G, Neg G where
+  neg_add : ∀ a : G, -a + a = 0
+
+class AddCommGroup₃ (G : Type) extends AddGroup₃ G, AddCommMonoid₃ G
+
+class Ring₃ (R : Type) extends AddGroup₃ R, Monoid₃ R, MulZeroClass R where
+  /-- Multiplication is left distributive over addition -/
+  left_distrib : ∀ a b c : R, a * (b + c) = a * b + a * c
+  /-- Multiplication is right distributive over addition -/
+  right_distrib : ∀ a b c : R, (a + b) * c = a * c + b * c
+
+/- Prove this! -/
+instance {R : Type} [Ring₃ R] : AddCommGroup₃ R :=
+{ Ring₃.toAddGroup₃ with
+  add_comm := by
+    sorry }
+
+instance : Ring₃ ℤ where
+  add := (· + ·)
+  add_assoc₃ := add_assoc
+  zero := 0
+  zero_add := by simp
+  add_zero := by simp
+  neg := (- ·)
+  neg_add := by simp
+  mul := (· * ·)
+  mul_assoc₃ := mul_assoc
+  one := 1
+  one_mul := by simp
+  mul_one := by simp
+  zero_mul := by simp
+  mul_zero := by simp
+  left_distrib := Int.mul_add
+  right_distrib := Int.add_mul
+
+-- Define module over a ring --
+class Module₁ (R : Type) [Ring₃ R] (M : Type) [AddCommGroup₃ M] extends SMul₃ R M where
+  zero_smul : ∀ m : M, (0 : R) • m = 0
+  one_smul : ∀ m : M, (1 : R) • m = m
+  mul_smul : ∀ (a b : R) (m : M), (a * b) • m = a • b • m
+  add_smul : ∀ (a b : R) (m : M), (a + b) • m = a • m + b • m
+  smul_add : ∀ (a : R) (m n : M), a • (m + n) = a • m + a • n
+
+/-
+class Module₂ (R : Type) [Ring R] (M : Type) extends SMul₃ R M, AddCommGroup M where
+  zero_smul : ∀ m : M, (0 : R) • m = 0
+  one_smul : ∀ m : M, (1 : R) • m = m
+  mul_smul : ∀ (a b : R) (m : M), (a * b) • m = a • b • m
+  add_smul : ∀ (a b : R) (m : M), (a + b) • m = a • m + b • m
+  smul_add : ∀ (a : R) (m n : M), a • (m + n) = a • m + a • n
+-/
+
+/-
+Note that if we uncomment block above, we will get an error. The problem is that
+AddCommGroup M instance is going to be part of Module₂ R M instance and we won't
+be able to infer type R from AddCommGroup M.
+
+The rule is to extend from classes that have all type parameters like SMul₃ R M
+-/
+
+-- Let's define an instances of the module - ring over itself --
+instance selfModule (R : Type) [Ring₃ R] : Module₁ R R where
+  smul := fun r s ↦ r*s
+  zero_smul := zero_mul
+  one_smul := one_mul
+  mul_smul := mul_assoc₃
+  add_smul := Ring₃.right_distrib
+  smul_add := Ring₃.left_distrib
+
+-- Another instance is an abelian group over ℤ --
+
+def nsmul₁ [Zero M] [Add M] : ℕ → M → M
+  | 0, _ => 0
+  | n + 1, a => a + nsmul₁ n a
+
+def zsmul₁ {M : Type*} [Zero M] [Add M] [Neg M] : ℤ → M → M
+  | Int.ofNat n, a => nsmul₁ n a
+  | Int.negSucc n, a => -nsmul₁ n.succ a
+
+instance abGrpModule (A : Type) [AddCommGroup₃ A] : Module₁ ℤ A where
+  smul := zsmul₁
+  zero_smul := sorry
+  one_smul := sorry
+  mul_smul := sorry
+  add_smul := sorry
+  smul_add := sorry
+
+-- The problem is that now Module₁ ℤ ℤ is ambiguous --
+#synth Module₁ ℤ ℤ
+
+/-
+The solution is to define data needed to define Module₁ ℤ A
+inside AddMonoid A from the start
+
+General rule: when going from rich (Module R M)
+to poor structure (Module ℤ M) never define, but forget
+-/
+
+class AddMonoid₄ (M : Type) extends AddSemigroup₃ M, AddZeroClass M where
+  /-- Multiplication by a natural number. -/
+  nsmul : ℕ → M → M := nsmul₁
+  /-- Multiplication by `(0 : ℕ)` gives `0`. -/
+  nsmul_zero : ∀ x, nsmul 0 x = 0 := by intros; rfl
+  /-- Multiplication by `(n + 1 : ℕ)` behaves as expected. -/
+  nsmul_succ : ∀ (n : ℕ) (x), nsmul (n + 1) x = x + nsmul n x := by intros; rfl
+
+instance mySMul {M : Type} [AddMonoid₄ M] : SMul ℕ M := ⟨AddMonoid₄.nsmul⟩
+
+instance (M N : Type) [AddMonoid₄ M] [AddMonoid₄ N] : AddMonoid₄ (M × N) where
+  add := fun p q ↦ (p.1 + q.1, p.2 + q.2)
+  add_assoc₃ := fun a b c ↦ by ext <;> apply add_assoc₃
+  zero := (0, 0)
+  zero_add := fun a ↦ by ext <;> apply zero_add
+  add_zero := fun a ↦ by ext <;> apply add_zero
+
+-- Morphisms --
+structure isMonoidHom₂ [Monoid G] [Monoid H] (f : G → H) : Prop where
+  map_one : f 1 = 1
+  map_mul : ∀ g g', f (g * g') = f g * f g'
+
+-- morphism = bundled function + axioms
+@[ext]
+structure MonoidHom₁ (G H : Type) [Monoid G] [Monoid H]  where
+  toFun : G → H
+  map_one : toFun 1 = 1
+  map_mul : ∀ g g', toFun (g * g') = toFun g * toFun g'
+
+-- Coercion --
+instance [Monoid G] [Monoid H] : CoeFun (MonoidHom₁ G H) (fun _ ↦ G → H) where
+  coe := MonoidHom₁.toFun
+
+attribute [coe] MonoidHom₁.toFun
+
+example [Monoid G] [Monoid H] (f : MonoidHom₁ G H) : f 1 = 1 :=  f.map_one
+
+-- Define Ring morphism --
+
+@[ext]
+structure AddMonoidHom₁ (G H : Type) [AddMonoid G] [AddMonoid H]  where
+  toFun : G → H
+  map_zero : toFun 0 = 0
+  map_add : ∀ g g', toFun (g + g') = toFun g + toFun g'
+
+instance [AddMonoid G] [AddMonoid H] : CoeFun (AddMonoidHom₁ G H) (fun _ ↦ G → H) where
+  coe := AddMonoidHom₁.toFun
+
+attribute [coe] AddMonoidHom₁.toFun
+
+@[ext]
+structure RingHom₁ (R S : Type) [Ring R] [Ring S] extends MonoidHom₁ R S, AddMonoidHom₁ R S
+
+/-
+When there are several monoid-like morphisms (monoids, rings),
+we would like to have same lemmas for them
+
+The way is to define abstract MonoidHomClass
+-/
+class MonoidHomClass₁ (F : Type) (M N : Type) [Monoid M] [Monoid N] where
+  toFun : F → M → N
+  map_one : ∀ f : F, toFun f 1 = 1
+  map_mul : ∀ f g g', toFun f (g * g') = toFun f g * toFun f g'
+
+/-
+def badInst [Monoid M] [Monoid N] [MonoidHomClass₁ F M N] : CoeFun F (fun _ ↦ M → N) where
+  coe := MonoidHomClass₁.toFun
+
+bad coercion instance : Lean needs to simultaneously infer F M N, while
+M and N can be clearly extracted from F
+-/
+
+class MonoidHomClass₂ (F : Type) (M N : outParam Type) [Monoid M] [Monoid N] where
+  toFun : F → M → N
+  map_one : ∀ f : F, toFun f 1 = 1
+  map_mul : ∀ f g g', toFun f (g * g') = toFun f g * toFun f g'
+
+instance [Monoid M] [Monoid N] [MonoidHomClass₂ F M N] : CoeFun F (fun _ ↦ M → N) where
+  coe := MonoidHomClass₂.toFun
+
+attribute [coe] MonoidHomClass₂.toFun
+
+instance (M N : Type) [Monoid M] [Monoid N] : MonoidHomClass₂ (MonoidHom₁ M N) M N where
+  toFun := MonoidHom₁.toFun
+  map_one := fun f ↦ f.map_one
+  map_mul := fun f ↦ f.map_mul
+
+instance (R S : Type) [Ring R] [Ring S] : MonoidHomClass₂ (RingHom₁ R S) R S where
+  toFun := fun f ↦ f.toMonoidHom₁.toFun
+  map_one := fun f ↦ f.toMonoidHom₁.map_one
+  map_mul := fun f ↦ f.toMonoidHom₁.map_mul
+
+-- Now we can apply abstract lemma --
+lemma map_inv_of_inv [Monoid M] [Monoid N] [MonoidHomClass₂ F M N] (f : F) {m m' : M} (h : m*m' = 1) :
+    f m * f m' = 1 := by
+  rw [← MonoidHomClass₂.map_mul, h, MonoidHomClass₂.map_one]
+
+example [Monoid M] [Monoid N] (f : MonoidHom₁ M N) {m m' : M} (h : m*m' = 1) : f m * f m' = 1 :=
+map_inv_of_inv f h
+
+example [Ring R] [Ring S] (f : RingHom₁ R S) {r r' : R} (h : r*r' = 1) : f r * f r' = 1 :=
+map_inv_of_inv f h
+
+-- Substructure --
+
+@[ext]
+structure Submonoid₁ (M : Type) [Monoid M] where
+  /-- The carrier of a submonoid. -/
+  carrier : Set M
+  /-- The product of two elements of a submonoid belongs to the submonoid. -/
+  mul_mem {a b} : a ∈ carrier → b ∈ carrier → a * b ∈ carrier
+  /-- The unit element belongs to the submonoid. -/
+  one_mem : 1 ∈ carrier
+
+/-- Submonoids in `M` can be seen as sets in `M`. -/
+instance [Monoid M] : SetLike (Submonoid₁ M) M where
+  coe := Submonoid₁.carrier
+  coe_injective' _ _ := Submonoid₁.ext
+
+class SubmonoidClass₁ (S : Type) (M : Type) [Monoid M] [SetLike S M] : Prop where
+  mul_mem : ∀ (s : S) {a b : M}, a ∈ s → b ∈ s → a * b ∈ s
+  one_mem : ∀ s : S, 1 ∈ s
+
+instance [Monoid M] : SubmonoidClass₁ (Submonoid₁ M) M where
+  mul_mem := Submonoid₁.mul_mem
+  one_mem := Submonoid₁.one_mem

@@ -7,6 +7,8 @@ open Nat
 
 #print Nat.Coprime
 
+#print Nat.factors
+
 example (m n : Nat) (h : m.Coprime n) : m.gcd n = 1 :=
   h
 
@@ -54,18 +56,26 @@ example (a b c : Nat) (h : a * b = a * c) (h' : a ≠ 0) : b = c :=
 
 example {m n : ℕ} (coprime_mn : m.Coprime n) : m ^ 2 ≠ 2 * n ^ 2 := by
   intro sqr_eq
-  have : 2 ∣ m := by
-    sorry
-  obtain ⟨k, meq⟩ := dvd_iff_exists_eq_mul_left.mp this
+  have two_dvd_m : 2 ∣ m := by
+    have := Nat.dvd_mul_right 2 (n ^ 2)
+    rw [← sqr_eq, Nat.pow_two] at this
+    rw [Nat.prime_two.dvd_mul] at this
+    cases this <;> assumption
+  obtain ⟨k, meq⟩ := dvd_iff_exists_eq_mul_left.mp two_dvd_m
   have : 2 * (2 * k ^ 2) = 2 * n ^ 2 := by
     rw [← sqr_eq, meq]
     ring
-  have : 2 * k ^ 2 = n ^ 2 :=
-    sorry
-  have : 2 ∣ n := by
-    sorry
+  have : 2 * k ^ 2 = n ^ 2 := by
+    rw [Nat.mul_right_inj (by norm_num : 2 ≠ 0)] at this
+    assumption
+  have two_dvd_n : 2 ∣ n := by
+    have this' := Nat.dvd_mul_right 2 (k ^ 2)
+    rw [this, Nat.pow_two] at this'
+    rw [Nat.prime_two.dvd_mul] at this'
+    cases this' <;> assumption
   have : 2 ∣ m.gcd n := by
-    sorry
+    apply Nat.dvd_gcd two_dvd_m two_dvd_n
   have : 2 ∣ 1 := by
-    sorry
+    rw [coprime_mn] at this
+    assumption
   norm_num at this
