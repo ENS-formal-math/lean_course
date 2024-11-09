@@ -5,6 +5,8 @@ import Mathlib.Order.Defs
 import Mathlib.Algebra.Ring.Int
 import Mathlib.Data.SetLike.Basic
 import Mathlib.Algebra.Module.Defs
+import Mathlib.Algebra.Group.Submonoid.Basic
+import Mathlib.Tactic
 
 -- Here we discuss how to build hierarchy of algebraic structures --
 
@@ -343,6 +345,31 @@ instance [Monoid M] : SetLike (Submonoid₁ M) M where
   coe := Submonoid₁.carrier
   coe_injective' _ _ := Submonoid₁.ext
 
+/-
+Since N is SetLike, there's a coercion and (x : N) means
+the subtype {x : M // x ∈ N}. The same happens for any Set M,
+it's not unique to Submonoid M only.
+-/
+example [Monoid M] (N : Submonoid₁ M) (x : N) : (x : M) ∈ N := x.property
+
+-- Let's equip the submonoid with monoid class instance --
+instance SubMonoid₁Monoid [Monoid M] (N : Submonoid₁ M) : Monoid N where
+  mul := fun ⟨x, hx⟩ ⟨y, hy⟩ ↦ ⟨x*y, N.mul_mem hx hy⟩
+  /-
+  We can prove that m₁ := x * (y * z) and m₂ := (x * y) * z in M
+  Thus, these elements are equal in N also because proofs are definitionally equal
+  m₁ = m₂ → ⟨m₁, p m₁⟩ = ⟨m₂, p m₂⟩
+  -/
+  mul_assoc := fun ⟨x, _⟩ ⟨y, _⟩ ⟨z, _⟩ ↦ SetCoe.ext (mul_assoc x y z)
+  one := ⟨1, N.one_mem⟩
+  one_mul := fun ⟨x, _⟩ ↦ SetCoe.ext (one_mul x)
+  mul_one := fun ⟨x, _⟩ ↦ SetCoe.ext (mul_one x)
+
+/-
+To apply lemmas about submonoids to subgroups we introduce
+abstract class just like for monoid morphism and state
+lemmas for it
+-/
 class SubmonoidClass₁ (S : Type) (M : Type) [Monoid M] [SetLike S M] : Prop where
   mul_mem : ∀ (s : S) {a b : M}, a ∈ s → b ∈ s → a * b ∈ s
   one_mem : ∀ s : S, 1 ∈ s
@@ -350,3 +377,54 @@ class SubmonoidClass₁ (S : Type) (M : Type) [Monoid M] [SetLike S M] : Prop wh
 instance [Monoid M] : SubmonoidClass₁ (Submonoid₁ M) M where
   mul_mem := Submonoid₁.mul_mem
   one_mem := Submonoid₁.one_mem
+
+/-
+Submonoids have a lattice structure: intersection as ⊓
+and closure of a union as ⊔
+-/
+instance [Monoid M] : Inf (Submonoid₁ M) :=
+  ⟨fun S₁ S₂ ↦
+    { carrier := S₁ ∩ S₂
+      one_mem := ⟨S₁.one_mem, S₂.one_mem⟩
+      mul_mem := fun ⟨hx, hx'⟩ ⟨hy, hy'⟩ ↦ ⟨S₁.mul_mem hx hy, S₂.mul_mem hx' hy'⟩ }⟩
+
+-- Quotient --
+
+/- Setoid is just a relation and a proof that it's an equivalence -/
+def Submonoid.Setoid [CommMonoid M] (N : Submonoid M) : Setoid M  where
+  r := fun x y ↦ ∃ w ∈ N, ∃ z ∈ N, x*w = y*z
+  iseqv := {
+    refl := fun x ↦ ⟨1, N.one_mem, 1, N.one_mem, rfl⟩
+    symm := fun ⟨w, hw, z, hz, h⟩ ↦ ⟨z, hz, w, hw, h.symm⟩
+    trans := by
+      intro x y z ⟨a, ha, b, hb, h⟩ ⟨a', ha', b', hb', h'⟩
+      use a * a', Submonoid.mul_mem N ha ha'
+      use b * b', Submonoid.mul_mem N hb hb'
+      rw [← mul_assoc, h, mul_assoc, mul_comm b, ← mul_assoc, h', mul_assoc, mul_comm b']
+  }
+
+-- Allows to write M ⧸ (N : Submonoid M) --
+instance [CommMonoid M] : HasQuotient M (Submonoid M) where
+  quotient' := fun N ↦ Quotient N.Setoid
+
+def QuotientMonoid.mk [CommMonoid M] (N : Submonoid M) : M → M ⧸ N := Quotient.mk N.Setoid
+
+instance [CommMonoid M] (N : Submonoid M) : Monoid (M ⧸ N) where
+  mul := Quotient.map₂' (· * ·) (by
+      -- introduce hypotheses that a ≃ a' and b ≃ b' defined at N.Setoid.r --
+      intro a a' ⟨wa, hwa, za, hza, ha⟩
+      intro b b' ⟨wb, hwb, zb, hzb, hb⟩
+      simp
+      -- now we prove that a * b ≃ a' * b' --
+      use wa * wb, Submonoid.mul_mem N hwa hwb
+      use za * zb, Submonoid.mul_mem N hza hzb
+      rw [← mul_assoc, mul_comm _ wa, ← mul_assoc, mul_comm wa, ha]
+      rw [mul_assoc, hb, ← mul_assoc, mul_assoc a', mul_comm za, ← mul_assoc, ← mul_assoc]
+  )
+  mul_assoc := by
+      sorry
+  one := QuotientMonoid.mk N 1
+  one_mul := by
+      sorry
+  mul_one := by
+      sorry
