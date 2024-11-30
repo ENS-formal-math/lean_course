@@ -117,6 +117,8 @@ def preimage {W : Type*} [AddCommGroup W] [Module K W] (φ : V →ₗ[K] W) (H :
 example (H H' : Submodule K V) :
     ((H ⊓ H' : Submodule K V) : Set V) = (H : Set V) ∩ (H' : Set V) := rfl
 
+#check Submodule
+
 -- Span of a (s : Set V) is a minimal Submodule K V containing it --
 example {s : Set V} (E : Submodule K V) : Submodule.span K s ≤ E ↔ s ⊆ E :=
   Submodule.span_le
@@ -172,3 +174,5 @@ Basis is a linear equivalence with a module of functions
 with a finite support ι →₀ K
 -/
 variable {ι : Type*} (B : Basis ι K V) (v : V) (i : ι)
+
+#check Complex.basisOneI
