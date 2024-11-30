@@ -122,5 +122,5 @@ theorem numbertheory_721 (x : Finset ℕ)
   have h₄ : x = x' := by sorry
   -- Testing, we see the possible pairs $(n, m)$ are $(1, 0), (2, 0), (3, 0), (4, 0), (0, 1), (0, 2).$ --
   have h₅ : y = {⟨1, 0⟩, ⟨2, 0⟩, ⟨3, 0⟩, ⟨4, 0⟩, ⟨0, 1⟩, ⟨0, 2⟩} := by
-    unfold_let; sorry
+    unfold_let; native_decide
   rw [h₄]; unfold_let x; rw [Finset.sum_map, h₅]; simp
