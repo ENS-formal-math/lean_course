@@ -63,6 +63,10 @@ theorem f_respects (a b : Nat) (h : mod7Rel a b) : f a = f b := by
 
 #check (Quot.lift f f_respects : Quot mod7Rel → Bool)
 
+-- the computation principle
+example (a : Nat) : Quot.lift f f_respects (Quot.mk mod7Rel a) = f a :=
+  rfl
+
 /-
 Choice
 -/
@@ -84,7 +88,3 @@ noncomputable def choose' {α : Sort u} {p : α → Prop} (h : ∃ x, p x) : α 
 
 theorem choose_spec' {α : Sort u} {p : α → Prop} (h : ∃ x, p x) : p (choose' h) :=
   (indefiniteDescription p h).property
-
--- the computation principle
-example (a : Nat) : Quot.lift f f_respects (Quot.mk mod7Rel a) = f a :=
-  rfl
