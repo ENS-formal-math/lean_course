@@ -35,3 +35,5 @@ def C := Finset.filter (fun x ↦ x ≤ 10) B
 -- It's often useful to attach information to the element that it's a member of the set --
 def D := Finset.attach C
 #eval D
+
+def f (x y : ℕ) := if h : x = y then Decidable.isTrue h else Decidable.isFalse h
